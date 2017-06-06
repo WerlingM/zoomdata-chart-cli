@@ -1,0 +1,84 @@
+{
+  "name": "zoomdata-chart-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool to manage Zoomdata Custom Charts",
+  "main": "./dist/zoomdata-chart.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --pretty",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/zoomdata-chart.ts",
+    "commit": "git-cz",
+    "commitmsg": "validate-commit-msg",
+    "lint": "tslint -t codeFrame src/**/*.ts test/**/*.ts --exclude src/**/*.d.ts",
+    "precommit": "lint-staged",
+    "prepush": "npm run build",
+    "start": "npm run build:live"
+  },
+  "lint-staged": {
+    "{src,test}/**/!(*.d).ts": [
+      "prettier --write --single-quote --trailing-comma=all",
+      "lint",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    }
+  },
+  "bin": {
+    "zd-chart": "./dist/zoomdata-chart.js",
+    "zd-chart-config": "./dist/zoomdata-chart-config.js",
+    "zd-chart-ls": "./dist/zoomdata-chart-ls.js",
+    "zd-chart-pull": "./dist/zoomdata-chart-pull.js",
+    "zd-chart-push": "./dist/zoomdata-chart-push.js",
+    "zd-chart-watch": "./dist/zoomdata-chart-watch.js"
+  },
+  "keywords": [],
+  "author": "Jonathan Avila <avilajonathan@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chalk": "^0.4.31",
+    "@types/chokidar": "^1.6.0",
+    "@types/commander": "^2.9.1",
+    "@types/content-type": "^1.0.33",
+    "@types/inquirer": "0.0.34",
+    "@types/lodash.attempt": "^4.2.2",
+    "@types/node": "^7.0.27",
+    "@types/ora": "^0.3.31",
+    "@types/prettyjson": "0.0.28",
+    "@types/request": "0.0.43",
+    "@types/request-promise-native": "^1.0.5",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.13.4",
+    "lint-staged": "^3.6.0",
+    "nodemon": "^1.11.0",
+    "prettier": "^1.4.2",
+    "ts-node": "^3.0.4",
+    "tslint": "^5.4.2",
+    "typescript": "^2.3.4",
+    "validate-commit-msg": "^2.12.1"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "chokidar": "^1.7.0",
+    "clui": "^0.3.1",
+    "commander": "^2.9.0",
+    "content-type": "^1.0.2",
+    "figlet": "^1.2.0",
+    "inquirer": "^3.0.6",
+    "lodash.attempt": "^4.2.0",
+    "ora": "^1.2.0",
+    "preferences": "^0.2.1",
+    "prettyjson": "^1.2.1",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  }
+}

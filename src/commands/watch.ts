@@ -1,0 +1,53 @@
+import * as chokidar from 'chokidar';
+import * as prettyjson from 'prettyjson';
+import { Component } from '../common';
+import { Config } from './config';
+import { getVisConfig } from './push';
+import ora = require('ora');
+import { updateBody } from '../requests/components';
+import { readFile } from '../utilities';
+
+function watchComponents(components: Component[], config: Config, dir: string) {
+  return Promise.all(
+    components.map((component: any) => watchComponent(component, config, dir)),
+  )
+    .then(() => Promise.resolve())
+    .catch(error => {
+      return Promise.reject(error);
+    });
+}
+
+function watchComponent(component: Component, config: Config, dir: string) {
+  return new Promise((resolve, reject) => {
+    chokidar.watch(`${dir}/${component.name}`).on('change', () => {
+      readFile(dir, component.name)
+        .then((body: string) => {
+          console.log(`
+              Updating component: ${component.name}...`);
+          updateBody(component, body, config).catch(reject);
+        })
+        .catch(reject);
+    });
+    resolve();
+  });
+}
+
+function watch(config: Config, dir?: string) {
+  const directory = dir ? dir : process.cwd();
+  const spinner = ora({
+    spinner: 'pong',
+  });
+  return getVisConfig(directory)
+    .then(visConfig => {
+      spinner.text = `Watching visualization: ${visConfig.name}`;
+      return watchComponents(visConfig.components, config, directory);
+    })
+    .then(() => spinner.start())
+    .catch(reason => {
+      spinner.fail();
+      console.log(prettyjson.render(reason));
+      return Promise.reject(reason.error);
+    });
+}
+
+export { watch };
