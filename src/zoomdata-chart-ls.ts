@@ -17,21 +17,16 @@ program
     'Specify the Zoomdata application server URL (e.g. https://myserver/zoomdata)',
     parseUrl,
   )
-  .option(
-    '-v, --verbose ',
-    'Outputs the full definition of the visualizations. ' +
-      'If this option is not provided, only the name and templateType will be returned',
-  )
   .parse(process.argv);
 
-const { verbose, ...options } = program;
+const { options } = program;
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
   program.help();
   process.exit(1);
 } else {
-  ls(config, verbose).catch(() => {
+  ls(config).catch(() => {
     process.exit(1);
   });
 }

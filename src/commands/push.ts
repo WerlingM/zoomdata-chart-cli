@@ -1,9 +1,8 @@
 import { Config } from './config';
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
-import { Component } from '../common';
-import { updateBody } from '../requests/components';
-import { parseJSON, readFile } from '../utilities';
+import { visualizations } from '../requests';
+import { parseJSON, readFile, writeFile } from '../utilities';
 const VIS_FILE_NAME = 'visualization.json';
 
 function getVisConfig(dir: string) {
@@ -16,42 +15,50 @@ function getVisConfig(dir: string) {
         throw visConfig;
       }
     })
-    .catch(reason => {
-      console.log(prettyjson.render(reason));
-      return Promise.reject(reason.error);
-    });
+    .catch(error => Promise.reject(error));
 }
 
-function updateComponents(
-  components: Component[],
-  serverConfig: Config,
-  dir: string,
-) {
-  return Promise.all(
-    components.map(component =>
-      readFile(dir, component.name).then((body: string) =>
-        updateBody(component, body, serverConfig),
-      ),
-    ),
-  )
-    .then(() => Promise.resolve())
-    .catch(error => {
-      return Promise.reject(error);
-    });
+function updateVisConfig(dir: string, config: Config) {
+  return getVisConfig(dir)
+    .then(visConfig =>
+      visualizations.getByName(visConfig.name, config).then(visualization => {
+        const updateBodies: Array<Promise<any>> = [];
+        visConfig.components.forEach((component: any) =>
+          updateBodies.push(
+            readFile(`${dir}/components`, component.name).then(
+              body => (component.body = body),
+            ),
+          ),
+        );
+        return Promise.all(updateBodies).then(() =>
+          writeFile(
+            dir,
+            VIS_FILE_NAME,
+            JSON.stringify(visConfig),
+          ).then(visConfigJSON => ({
+            visConfigJSON,
+            visualizationId: visualization.id,
+            visualizationName: visualization.name,
+          })),
+        );
+      }),
+    )
+    .catch(error => Promise.reject(error));
 }
 
 function push(config: Config, dir?: string) {
   const directory = dir ? dir : process.cwd();
   const spinner = ora('Pushing chart').start();
-  return getVisConfig(directory)
-    .then(visConfig =>
-      updateComponents(visConfig.components, config, directory),
-    )
+  return updateVisConfig(directory, config)
+    .then(({ visualizationId, visualizationName, visConfigJSON }) => {
+      spinner.text = `Pushing chart: ${visualizationName}`;
+      return visualizations.update(visualizationId, visConfigJSON, config);
+    })
     .then(() => spinner.succeed())
-    .catch(reason => {
+    .catch(error => {
       spinner.fail();
-      console.log(prettyjson.render(reason));
-      return Promise.reject(reason.error);
+      console.log(prettyjson.render(error));
+      return Promise.reject(error);
     });
 }
 

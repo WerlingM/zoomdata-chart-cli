@@ -19,8 +19,8 @@ function watchComponents(components: Component[], config: Config, dir: string) {
 
 function watchComponent(component: Component, config: Config, dir: string) {
   return new Promise((resolve, reject) => {
-    chokidar.watch(`${dir}/${component.name}`).on('change', () => {
-      readFile(dir, component.name)
+    chokidar.watch(`${dir}/components/${component.name}`).on('change', () => {
+      readFile(`${dir}/components`, component.name)
         .then((body: string) => {
           console.log(`
               Updating component: ${component.name}...`);
@@ -43,10 +43,10 @@ function watch(config: Config, dir?: string) {
       return watchComponents(visConfig.components, config, directory);
     })
     .then(() => spinner.start())
-    .catch(reason => {
+    .catch(error => {
       spinner.fail();
-      console.log(prettyjson.render(reason));
-      return Promise.reject(reason.error);
+      console.log(prettyjson.render(error));
+      return Promise.reject(error);
     });
 }
 
