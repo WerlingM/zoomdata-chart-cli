@@ -3,28 +3,53 @@ import { Config } from '../commands/config';
 import { Visualization } from '../common';
 import { send } from './index';
 
-function get(serverConfig: Config): Promise<Visualization[]> {
+interface GetParameters {
+  enabled?: boolean;
+  builtIn?: boolean;
+  fields?: string;
+  name?: string;
+}
+
+function getPkgBuffer(
+  visualizationId: string,
+  serverConfig: Config,
+): Promise<Buffer> {
+  const { application, username, password } = serverConfig;
+  const url = `${application}/service/visualizations/export/${visualizationId}`;
+  const requestOptions: request.Options = {
+    auth: { username, password },
+    encoding: null,
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    url,
+  };
+
+  return send<Buffer>(requestOptions);
+}
+
+function get(
+  serverConfig: Config,
+  queryOptions?: GetParameters,
+): Promise<Visualization[]> {
   const { application, username, password } = serverConfig;
   const url = `${application}/service/visualizations`;
   const requestOptions: request.Options = {
     auth: { username, password },
-    headers: { 'content-type': 'application/vnd.zoomdata+json' },
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    qs: queryOptions,
     url,
   };
 
   return send(requestOptions);
 }
 
-function getByName(name: string, serverConfig: Config): Promise<Visualization> {
-  const { application, username, password } = serverConfig;
-  const url = `${application}/service/visualizations?name=${name}`;
-  const requestOptions: request.Options = {
-    auth: { username, password },
-    headers: { 'content-type': 'application/vnd.zoomdata+json' },
-    url,
-  };
+function getCustom(serverConfig: Config) {
+  return get(serverConfig, { builtIn: false }).catch(reason => {
+    return Promise.reject(reason);
+  });
+}
 
-  return send<Visualization[]>(requestOptions)
+function getByName(name: string, serverConfig: Config): Promise<Visualization> {
+  return get(serverConfig, { name })
     .then(visualizations => {
       if (visualizations.length === 0) {
         throw new Error(
@@ -38,4 +63,18 @@ function getByName(name: string, serverConfig: Config): Promise<Visualization> {
     });
 }
 
-export { get, getByName };
+function update(visualizationId: string, body: any, serverConfig: Config) {
+  const { application, username, password } = serverConfig;
+  const url = `${application}/service/visualizations/${visualizationId}`;
+  const requestOptions: request.Options = {
+    auth: { username, password },
+    body,
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    method: 'PUT',
+    url,
+  };
+
+  return send(requestOptions);
+}
+
+export { get, getByName, getPkgBuffer, getCustom, update };

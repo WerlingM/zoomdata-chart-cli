@@ -13,7 +13,7 @@ function getById(
   const url = `${application}/service/visualizations/${visualizationId}/components/${id}`;
   const requestOptions: request.Options = {
     auth: { username, password },
-    headers: { 'content-type': 'application/vnd.zoomdata+json' },
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
     url,
   };
 
@@ -35,7 +35,7 @@ function updateBody(
   const requestOptions: request.Options = {
     auth: { username, password },
     body: JSON.stringify({ ...pick(component, 'name', 'type'), ...{ body } }),
-    headers: { 'content-type': 'application/vnd.zoomdata+json' },
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
     method: 'PUT',
     url,
   };

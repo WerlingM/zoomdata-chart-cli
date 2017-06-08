@@ -9,6 +9,7 @@ function send<T>(requestOptions: requestPromise.Options): Promise<T> {
   const defaultOptions = {
     simple: true,
     transform: autoParse,
+    transform2xxOnly: true,
   };
   const options = { ...defaultOptions, ...requestOptions };
 
@@ -28,6 +29,10 @@ function autoParse(body: any, response: http.IncomingMessage): any {
       } else {
         return parsedJSON;
       }
+    } else if (
+      contentType.parse(response).type === 'application/octet-stream'
+    ) {
+      return body;
     } else {
       throw new Error('Invalid content type received in response');
     }

@@ -1,6 +1,8 @@
+import * as extractZip from 'extract-zip';
 import * as Url from 'url';
 import attempt = require('lodash.attempt');
 import * as fs from 'fs';
+import { error, rm } from 'shelljs';
 
 function parseJSON(str: string) {
   return attempt(JSON.parse, str);
@@ -41,7 +43,7 @@ function pick(o: { [key: string]: any }, ...props: any[]) {
   return Object.assign({}, ...props.map(prop => ({ [prop]: o[prop] })));
 }
 
-function writeFile(dir: string, name: string, body: string) {
+function writeFile(dir: string, name: string, body: string | Buffer) {
   return new Promise((resolve, reject) => {
     fs.mkdir(dir, mkdirErr => {
       if (mkdirErr && mkdirErr.code !== 'EEXIST') {
@@ -71,4 +73,33 @@ function readFile(path: string, name: string) {
   });
 }
 
-export { parseJSON, parseCredentials, parseUrl, pick, writeFile, readFile };
+function unzipFile(
+  srcFilePath: string,
+  targetDir: string,
+  removeZip?: boolean,
+) {
+  return new Promise((resolve, reject) => {
+    extractZip(srcFilePath, { dir: targetDir }, err => {
+      if (err) {
+        reject(err);
+      }
+      if (removeZip) {
+        rm(srcFilePath);
+        if (error()) {
+          reject(new Error('Unable to remove zip file'));
+        }
+      }
+      resolve();
+    });
+  });
+}
+
+export {
+  parseJSON,
+  parseCredentials,
+  parseUrl,
+  pick,
+  writeFile,
+  readFile,
+  unzipFile,
+};
