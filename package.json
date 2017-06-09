@@ -32,6 +32,10 @@
       "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
     }
   },
+  "pkg": {
+    "assets": "node_modules/figlet/fonts/**/*",
+    "scripts": "dist/*.js"
+  },
   "bin": {
     "zd-chart": "./dist/zoomdata-chart.js",
     "zd-chart-config": "./dist/zoomdata-chart-config.js",
