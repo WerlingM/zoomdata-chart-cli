@@ -1,3 +1,4 @@
+import { strEnum } from '../utilities';
 export interface Visualization {
   id: string;
   templateId: string;
@@ -26,4 +27,35 @@ export interface Component {
   uploadDate: string;
   path: string;
   links: any[];
+}
+
+export const Control = strEnum([
+  // 'Bookmark',
+  'Color',
+  'Configure',
+  'ConfigureRaw',
+  'Defaults',
+  // 'DirtyDataIndicator',
+  'Download',
+  'Filters',
+  // 'FiltersIndicator',
+  'Info',
+  // 'NoDataIndicator',
+  'Rulers',
+  // 'Share',
+  'Sort',
+  'TimeControl',
+  'TimePlayer',
+  // 'TimeTable',
+  'UberStyle',
+  'Undo',
+  // 'Zoom',
+]);
+
+export type Control = keyof typeof Control;
+
+export interface ControlDef {
+  id: keyof typeof Control;
+  name: string;
+  description: string;
 }

@@ -94,6 +94,13 @@ function unzipFile(
   });
 }
 
+function strEnum<T extends string>(arr: T[]): { [K in T]: K } {
+  return arr.reduce((res, key) => {
+    res[key] = key;
+    return res;
+  }, Object.create(null));
+}
+
 export {
   parseJSON,
   parseCredentials,
@@ -102,4 +109,5 @@ export {
   writeFile,
   readFile,
   unzipFile,
+  strEnum,
 };

@@ -15,6 +15,10 @@ program
     'config',
     "Set-up an encrypted configuration of Zoomdata's server URL and admin credentials",
   )
+  .command(
+    'edit [name]',
+    "Edit a custom chart's controls, components, libraries, and/or variables ",
+  )
   .command('ls', 'List custom visualizations')
   .command(
     'pull [name]',
