@@ -9,13 +9,7 @@ function listCustomVisualizations(config: Config) {
     .getCustom(config)
     .then(customVisualizations => {
       spinner.succeed();
-      console.log(
-        prettyjson.render(
-          customVisualizations.map(vis => ({
-            name: vis.name,
-          })),
-        ),
-      );
+      console.log(prettyjson.render(customVisualizations.map(vis => vis.name)));
     })
     .catch(error => {
       spinner.fail();
