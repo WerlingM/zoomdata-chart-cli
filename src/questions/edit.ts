@@ -1,5 +1,9 @@
 import * as inquirer from 'inquirer';
+import { Config } from '../commands/config';
+import { Visualization } from '../common';
 import { strEnum } from '../utilities';
+import * as componentQuestions from './components';
+import * as controlQuestions from './controls';
 
 const editOptions = strEnum([
   'Components',
@@ -26,26 +30,27 @@ const questions: inquirer.Questions = [
   },
 ];
 
-function answerHandler(answers: inquirer.Answers) {
-  let selection: editOption;
+function answerHandler(
+  answers: inquirer.Answers,
+  visualization: Visualization,
+  serverConfig: Config,
+): any {
   switch (answers.editOptions) {
     case editOptions.Components:
-      selection = editOptions.Components;
-      break;
+      return componentQuestions.prompt(visualization, serverConfig);
     case editOptions.Controls:
-      selection = editOptions.Controls;
-      break;
-    case editOptions.Libraries:
-      selection = editOptions.Libraries;
-      break;
-    case editOptions.Variables:
-      selection = editOptions.Variables;
-      break;
-    default:
-      return;
+      return controlQuestions.prompt(visualization, serverConfig);
+    // case editOptions.Libraries:
+    //   return editOptions.Libraries;
+    // case editOptions.Variables:
+    //   return editOptions.Variables;
   }
-
-  return selection;
 }
 
-export { questions, answerHandler, editOptions, editOption };
+function prompt(visualization: Visualization, serverConfig: Config) {
+  return inquirer
+    .prompt(questions)
+    .then(answers => answerHandler(answers, visualization, serverConfig));
+}
+
+export { questions, answerHandler, prompt, editOptions, editOption };

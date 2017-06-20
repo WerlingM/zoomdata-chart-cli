@@ -1,5 +1,8 @@
 import * as inquirer from 'inquirer';
-import { ControlDef } from '../common';
+import { Config } from '../commands/config';
+import { ControlDef, Visualization } from '../common';
+import { visualizations } from '../requests';
+import ora = require('ora');
 
 const controls: ControlDef[] = [
   {
@@ -72,8 +75,28 @@ const questions: inquirer.Question[] = [
   },
 ];
 
-function answerHandler(answers: inquirer.Answers) {
-  return answers.controls;
+function answerHandler(
+  answers: inquirer.Answers,
+  visualization: Visualization,
+  serverConfig: Config,
+) {
+  visualization.controls = answers.controls;
+  const spinner = ora(`Updating controls for: ${visualization.name}`).start();
+  return visualizations
+    .update(visualization.id, JSON.stringify(visualization), serverConfig)
+    .then(() => spinner.succeed())
+    .catch(error => {
+      spinner.fail();
+      return Promise.reject(error);
+    });
 }
 
-export { questions, answerHandler };
+function prompt(visualization: Visualization, serverConfig: Config) {
+  questions[0].default = visualization.controls;
+
+  return inquirer
+    .prompt(questions)
+    .then(answers => answerHandler(answers, visualization, serverConfig));
+}
+
+export { questions, answerHandler, prompt };

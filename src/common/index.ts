@@ -59,3 +59,7 @@ export interface ControlDef {
   name: string;
   description: string;
 }
+
+export const componentTypes = strEnum(['text/css', 'text/javascript']);
+
+export type ComponentType = keyof typeof componentTypes;
