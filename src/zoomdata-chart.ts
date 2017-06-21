@@ -17,12 +17,12 @@ program
     "Set-up an encrypted configuration of Zoomdata's server URL and admin credentials",
   )
   .command(
-    'edit [name]',
+    'edit [chartname]',
     "Edit a custom chart's controls, components, libraries, and/or variables",
   )
   .command('ls', 'List custom visualizations')
   .command(
-    'pull [name]',
+    'pull [chartname]',
     'Pull the latest version of a custom chart from the Zoomdata server',
   )
   .command('push', 'Push the current state of the chart to the Zoomdata server')
