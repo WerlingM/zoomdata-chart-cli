@@ -67,4 +67,4 @@ function prompt(visualization: Visualization, serverConfig: Config) {
     .then(answers => answerHandler(answers, visualization, serverConfig));
 }
 
-export { questions, prompt, answerHandler, componentOptions };
+export { prompt };

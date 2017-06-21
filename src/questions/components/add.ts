@@ -48,4 +48,4 @@ function prompt(visualization: Visualization, serverConfig: Config) {
     .then(answers => answerHandler(answers, visualization, serverConfig));
 }
 
-export { questions, answerHandler, prompt };
+export { prompt };

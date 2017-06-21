@@ -4,6 +4,7 @@ import { Visualization } from '../common';
 import { strEnum } from '../utilities';
 import * as componentQuestions from './components';
 import * as controlQuestions from './controls';
+import * as libraryQuestions from './libraries';
 
 const editOptions = strEnum([
   'Components',
@@ -40,8 +41,8 @@ function answerHandler(
       return componentQuestions.prompt(visualization, serverConfig);
     case editOptions.Controls:
       return controlQuestions.prompt(visualization, serverConfig);
-    // case editOptions.Libraries:
-    //   return editOptions.Libraries;
+    case editOptions.Libraries:
+      return libraryQuestions.prompt(visualization, serverConfig);
     // case editOptions.Variables:
     //   return editOptions.Variables;
   }
@@ -53,4 +54,4 @@ function prompt(visualization: Visualization, serverConfig: Config) {
     .then(answers => answerHandler(answers, visualization, serverConfig));
 }
 
-export { questions, answerHandler, prompt, editOptions, editOption };
+export { prompt };
