@@ -8,6 +8,10 @@ import { edit } from './commands/edit';
 import { promptForCustomVis } from './commands/pull';
 
 program
+  .description(
+    "Edit a custom chart's controls, components, libraries, and/or variables",
+  )
+  .arguments('[chartname]')
   .option(
     '-a, --app [URL]',
     'Specify the Zoomdata application server URL (e.g. https://myserver/zoomdata)',

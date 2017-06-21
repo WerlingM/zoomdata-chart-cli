@@ -7,6 +7,10 @@ import { parseCredentials, parseUrl } from './utilities';
 import ora = require('ora');
 
 program
+  .description(
+    'Pull the latest version of a custom chart from the Zoomdata server',
+  )
+  .arguments('[chartname]')
   .option(
     '-a, --app [URL]',
     'Specify the Zoomdata application server URL (e.g. https://myserver/zoomdata)',

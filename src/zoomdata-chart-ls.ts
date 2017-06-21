@@ -7,6 +7,7 @@ import { ls } from './commands/ls';
 import { parseCredentials, parseUrl } from './utilities';
 
 program
+  .description('List custom visualizations')
   .option(
     '-u, --user [user:password]',
     'Specify the user name and password to use for server authentication.',

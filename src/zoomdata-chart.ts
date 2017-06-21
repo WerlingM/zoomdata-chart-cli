@@ -11,13 +11,14 @@ console.log(
 
 program
   .version('1.0.0')
+  .description('A CLI tool to manage Zoomdata Custom Charts')
   .command(
     'config',
     "Set-up an encrypted configuration of Zoomdata's server URL and admin credentials",
   )
   .command(
     'edit [name]',
-    "Edit a custom chart's controls, components, libraries, and/or variables ",
+    "Edit a custom chart's controls, components, libraries, and/or variables",
   )
   .command('ls', 'List custom visualizations')
   .command(

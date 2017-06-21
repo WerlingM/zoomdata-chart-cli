@@ -6,6 +6,9 @@ import { watch } from './commands/watch';
 import { parseCredentials, parseUrl } from './utilities';
 
 program
+  .description(
+    'Watch for changes in chart files and update them in the Zoomdata server',
+  )
   .option(
     '-a, --app [URL]',
     'Specify the Zoomdata application server URL (e.g. https://myserver/zoomdata)',

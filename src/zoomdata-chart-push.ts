@@ -6,6 +6,7 @@ import { push } from './commands/push';
 import { parseCredentials, parseUrl } from './utilities';
 
 program
+  .description('Push the current state of the chart to the Zoomdata server')
   .option(
     '-a, --app [URL]',
     'Specify the Zoomdata application server URL (e.g. https://myserver/zoomdata)',
