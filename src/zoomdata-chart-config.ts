@@ -59,7 +59,7 @@ inquirer.prompt(questions).then(configAnswers => {
   const confirm: inquirer.Questions = [
     {
       default: false,
-      message: `Store the above configuration in ${filePath}:`,
+      message: `Store the above configuration in ${filePath}?:`,
       name: 'configSave',
       type: 'confirm',
     },

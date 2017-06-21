@@ -34,7 +34,6 @@ if (!config.application || !config.username) {
 
 let visName;
 if (program.args.length === 0) {
-  // Select a custom visualization to pull
   promptForCustomVis(config).then(answer => {
     edit(answer.visualization, config).catch(() => {
       process.exit(1);
