@@ -29,6 +29,14 @@ export interface Component {
   links: any[];
 }
 
+export interface Library {
+  accountId: string;
+  content: null[];
+  filename: string;
+  id: string;
+  links: any[];
+}
+
 export const Control = strEnum([
   // 'Bookmark',
   'Color',

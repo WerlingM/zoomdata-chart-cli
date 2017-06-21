@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as requestPromise from 'request-promise-native';
 import { parseJSON } from '../utilities';
 import * as components from './components';
+import * as libraries from './libraries';
 import * as visualizations from './visualizations';
 
 function send<T>(requestOptions: requestPromise.Options): Promise<T> {
@@ -39,4 +40,4 @@ function autoParse(body: any, response: http.IncomingMessage): any {
   }
 }
 
-export { send, visualizations, components };
+export { send, visualizations, components, libraries };
