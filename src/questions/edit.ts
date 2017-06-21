@@ -6,6 +6,7 @@ import * as componentQuestions from './components';
 import * as controlQuestions from './controls';
 import * as libraryQuestions from './libraries';
 import * as nameQuestions from './name';
+import * as visibilityQuestions from './visibility';
 
 const editOptions = strEnum([
   'Components',
@@ -13,6 +14,7 @@ const editOptions = strEnum([
   'Libraries',
   'Name',
   'Variables',
+  'Visibility',
 ]);
 
 type editOption = keyof typeof editOptions;
@@ -23,6 +25,7 @@ const options: editOption[] = [
   'Libraries',
   'Name',
   'Variables',
+  'Visibility',
 ];
 
 const questions: inquirer.Questions = [
@@ -48,6 +51,8 @@ function answerHandler(
       return libraryQuestions.prompt(visualization, serverConfig);
     case editOptions.Name:
       return nameQuestions.prompt(visualization, serverConfig);
+    case editOptions.Visibility:
+      return visibilityQuestions.prompt(visualization, serverConfig);
     // case editOptions.Variables:
     //   return editOptions.Variables;
   }
