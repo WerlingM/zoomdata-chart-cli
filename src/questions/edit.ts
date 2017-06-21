@@ -5,11 +5,13 @@ import { strEnum } from '../utilities';
 import * as componentQuestions from './components';
 import * as controlQuestions from './controls';
 import * as libraryQuestions from './libraries';
+import * as nameQuestions from './name';
 
 const editOptions = strEnum([
   'Components',
   'Controls',
   'Libraries',
+  'Name',
   'Variables',
 ]);
 
@@ -19,6 +21,7 @@ const options: editOption[] = [
   'Components',
   'Controls',
   'Libraries',
+  'Name',
   'Variables',
 ];
 
@@ -43,6 +46,8 @@ function answerHandler(
       return controlQuestions.prompt(visualization, serverConfig);
     case editOptions.Libraries:
       return libraryQuestions.prompt(visualization, serverConfig);
+    case editOptions.Name:
+      return nameQuestions.prompt(visualization, serverConfig);
     // case editOptions.Variables:
     //   return editOptions.Variables;
   }
