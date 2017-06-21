@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import * as program from 'commander';
+import * as prettyjson from 'prettyjson';
 import { getConfig } from './commands/config';
 import { parseCredentials, parseUrl } from './utilities';
 import ora = require('ora');
 import { edit } from './commands/edit';
-import { promptForCustomVis } from './commands/pull';
+import * as selectQuestions from './questions/select';
 
 program
   .description(
@@ -34,11 +35,13 @@ if (!config.application || !config.username) {
 
 let visName;
 if (program.args.length === 0) {
-  promptForCustomVis(config).then(answer => {
-    edit(answer.visualization, config).catch(() => {
+  selectQuestions
+    .prompt(config)
+    .then(visualization => edit(visualization, config))
+    .catch(error => {
+      console.log(prettyjson.render(error));
       process.exit(1);
     });
-  });
 } else {
   visName = program.args[0];
   edit(visName, config).catch(() => {

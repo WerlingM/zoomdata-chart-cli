@@ -1,55 +1,40 @@
-import * as inquirer from 'inquirer';
 import * as prettyjson from 'prettyjson';
+import { Visualization } from '../common';
 import { visualizations } from '../requests';
-import { Config } from './config';
-import ora = require('ora');
 import { getPkgBuffer } from '../requests/visualizations';
 import { unzipFile, writeFile } from '../utilities';
+import { Config } from './config';
+import ora = require('ora');
 
-function pull(name: string, serverConfig: Config, dir?: string) {
+function pull(
+  nameOrVis: string | Visualization,
+  serverConfig: Config,
+  dir?: string,
+) {
   const directory = dir ? dir : process.cwd();
-  const spinner = ora(`Pulling chart: ${name}`).start();
+  if (typeof nameOrVis === 'object') {
+    const spinner = ora(`Pulling chart: ${nameOrVis.name}`).start();
+    return getPackage(nameOrVis, serverConfig, directory)
+      .then(() => spinner.succeed())
+      .catch(error => {
+        spinner.fail();
+        console.log(prettyjson.render(error));
+        return Promise.reject(error);
+      });
+  }
+
+  let spinner = ora(`Fetching chart: ${nameOrVis}`).start();
   return visualizations
-    .getByName(name, serverConfig)
+    .getByName(nameOrVis, serverConfig)
     .then(visualization => {
-      const visName = visualization.name.toLowerCase().replace(/ /g, '_');
-      return getPkgBuffer(visualization.id, serverConfig)
-        .then(buffer => writeFile(directory, `${visName}.zip`, buffer))
-        .then(() =>
-          unzipFile(
-            `${directory}/${visName}.zip`,
-            `${directory}/${visName}`,
-            true,
-          ),
-        )
-        .catch(reason => Promise.reject(reason));
-    })
-    .then(() => spinner.succeed())
-    .catch(error => {
-      spinner.fail();
-      console.log(prettyjson.render(error));
-      return Promise.reject(error);
-    });
-}
-
-function promptForCustomVis(config: Config) {
-  const spinner = ora('Fetching custom charts').start();
-  return visualizations
-    .getCustom(config)
-    .then(customVisualizations => {
       spinner.succeed();
-      const customVisNames = customVisualizations.map(
-        visualization => visualization.name,
-      );
-      const questions: inquirer.Questions = [
-        {
-          choices: customVisNames,
-          message: 'Select a custom chart to pull:',
-          name: 'visualization',
-          type: 'list',
-        },
-      ];
-      return inquirer.prompt(questions).catch(reason => Promise.reject(reason));
+      spinner = ora(`Pulling chart: ${nameOrVis}`).start();
+      return getPackage(visualization, serverConfig, directory)
+        .then(() => spinner.succeed())
+        .catch(error => {
+          spinner.fail();
+          return Promise.reject(error);
+        });
     })
     .catch(error => {
       spinner.fail();
@@ -58,4 +43,15 @@ function promptForCustomVis(config: Config) {
     });
 }
 
-export { pull, promptForCustomVis };
+function getPackage(
+  visualization: Visualization,
+  serverConfig: Config,
+  dir: string,
+) {
+  const visName = visualization.name.toLowerCase().replace(/ /g, '_');
+  return getPkgBuffer(visualization.id, serverConfig)
+    .then(buffer => writeFile(dir, `${visName}.zip`, buffer))
+    .then(() => unzipFile(`${dir}/${visName}.zip`, `${dir}/${visName}`, true));
+}
+
+export { pull };
