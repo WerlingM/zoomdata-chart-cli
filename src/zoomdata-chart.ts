@@ -18,7 +18,7 @@ program
   )
   .command(
     'edit [chartname]',
-    "Edit a custom chart's controls, components, libraries, name, and/or variables",
+    "Edit a custom chart's controls, components, libraries, name, variables, and/or visibility",
   )
   .command('ls', 'List custom visualizations')
   .command(

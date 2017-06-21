@@ -10,7 +10,7 @@ import * as selectQuestions from './questions/select';
 
 program
   .description(
-    "Edit a custom chart's controls, components, libraries, and/or variables",
+    "Edit a custom chart's controls, components, libraries, name, variables, and/or visibility",
   )
   .arguments('[chartname]')
   .option(
