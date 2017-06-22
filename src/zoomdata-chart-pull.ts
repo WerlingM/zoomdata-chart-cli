@@ -3,10 +3,9 @@
 import * as program from 'commander';
 import * as prettyjson from 'prettyjson';
 import { getConfig } from './commands/config';
-import { parseCredentials, parseUrl } from './utilities';
-import ora = require('ora');
 import { pull } from './commands/pull';
 import * as selectQuestions from './questions/select';
+import { parseCredentials, parseUrl } from './utilities';
 
 program
   .description(

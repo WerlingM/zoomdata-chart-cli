@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import * as program from 'commander';
-import ora = require('ora');
 import { getConfig } from './commands/config';
 import { ls } from './commands/ls';
 import { parseCredentials, parseUrl } from './utilities';

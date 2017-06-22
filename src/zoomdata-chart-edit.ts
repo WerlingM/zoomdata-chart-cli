@@ -3,10 +3,9 @@
 import * as program from 'commander';
 import * as prettyjson from 'prettyjson';
 import { getConfig } from './commands/config';
-import { parseCredentials, parseUrl } from './utilities';
-import ora = require('ora');
 import { edit } from './commands/edit';
 import * as selectQuestions from './questions/select';
+import { parseCredentials, parseUrl } from './utilities';
 
 program
   .description(
@@ -25,7 +24,7 @@ program
   )
   .parse(process.argv);
 
-const { ...options } = program;
+const { options } = program;
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
