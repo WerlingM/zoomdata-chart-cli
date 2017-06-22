@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer';
+import { ComponentType, Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
-import { ComponentType, Visualization } from '../../common';
 import { components } from '../../requests';
 import ora = require('ora');
 

@@ -1,6 +1,6 @@
 import * as request from 'request-promise-native';
+import { Library } from '../@types/zoomdata';
 import { Config } from '../commands/config';
-import { Library } from '../common';
 import { send } from './index';
 
 function getById(id: string, serverConfig: Config): Promise<string> {

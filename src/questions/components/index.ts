@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer';
+import { Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
-import { Visualization } from '../../common';
 import { strEnum } from '../../utilities';
 import * as addQuestions from './add';
 import * as editQuestions from './edit';

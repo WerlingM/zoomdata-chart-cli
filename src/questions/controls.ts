@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer';
+import { ControlDef, Visualization } from '../@types/zoomdata';
 import { Config } from '../commands/config';
-import { ControlDef, Visualization } from '../common';
 import { visualizations } from '../requests';
 import ora = require('ora');
 

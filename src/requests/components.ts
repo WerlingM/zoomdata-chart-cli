@@ -1,6 +1,6 @@
 import * as request from 'request-promise-native';
+import { Component } from '../@types/zoomdata';
 import { Config } from '../commands/config';
-import { Component } from '../common';
 import { pick } from '../utilities';
 import { send } from './index';
 

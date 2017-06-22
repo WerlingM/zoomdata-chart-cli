@@ -1,4 +1,4 @@
-import { strEnum } from '../utilities';
+import { strEnum } from '../../utilities';
 export interface Visualization {
   id: string;
   templateId: string;

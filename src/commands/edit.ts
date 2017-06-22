@@ -1,6 +1,6 @@
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
-import { Visualization } from '../common';
+import { Visualization } from '../@types/zoomdata';
 import { edit as editQuestions } from '../questions';
 import { visualizations } from '../requests';
 import { Config } from './config';
@@ -20,6 +20,7 @@ function edit(nameOrVis: string | Visualization, serverConfig: Config) {
       return editQuestions.prompt(visualization, serverConfig);
     })
     .catch(error => {
+      spinner.fail();
       console.log(prettyjson.render);
       return Promise.reject(error);
     });

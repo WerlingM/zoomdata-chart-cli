@@ -1,5 +1,5 @@
 import * as prettyjson from 'prettyjson';
-import { Visualization } from '../common';
+import { Visualization } from '../@types/zoomdata';
 import { visualizations } from '../requests';
 import { getPkgBuffer } from '../requests/visualizations';
 import { unzipFile, writeFile } from '../utilities';

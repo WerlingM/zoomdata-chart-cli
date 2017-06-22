@@ -1,6 +1,6 @@
 import * as chokidar from 'chokidar';
 import * as prettyjson from 'prettyjson';
-import { Component } from '../common';
+import { Component } from '../@types/zoomdata';
 import { Config } from './config';
 import { getVisConfig } from './push';
 import ora = require('ora');

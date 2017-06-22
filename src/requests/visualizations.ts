@@ -1,6 +1,6 @@
 import * as request from 'request-promise-native';
+import { Visualization } from '../@types/zoomdata';
 import { Config } from '../commands/config';
-import { Visualization } from '../common';
 import { send } from './index';
 
 interface GetParameters {
