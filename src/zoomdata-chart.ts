@@ -20,15 +20,16 @@ program
     'edit [chartname]',
     "Edit a custom chart's controls, components, libraries, name, variables, and/or visibility",
   )
-  .command('ls', 'List custom visualizations')
+  .command('ls', 'List custom charts')
   .command(
     'pull [chartname]',
     'Pull the latest version of a custom chart from the Zoomdata server',
   )
   .command('push', 'Push the current state of the chart to the Zoomdata server')
+  .command('rm', 'Remove a custom chart or library from the Zoomdata server')
   .command(
     'watch',
-    'Watch for changes in chart files and update them in the Zoomdata server',
+    'Watch for changes in custom chart files and update them in the Zoomdata server',
   )
   .parse(process.argv);
 

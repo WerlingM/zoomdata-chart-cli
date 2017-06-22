@@ -7,7 +7,7 @@ import { parseCredentials, parseUrl } from './utilities';
 
 program
   .description(
-    'Watch for changes in chart files and update them in the Zoomdata server',
+    'Watch for changes in custom chart files and update them in the Zoomdata server',
   )
   .option(
     '-a, --app [URL]',
