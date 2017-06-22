@@ -11,8 +11,8 @@
     "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/zoomdata-chart.ts",
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
-    "lint": "tslint -t codeFrame src/**/*.ts test/**/*.ts --exclude src/**/*.d.ts",
-    "lint-fix": "tslint -t codeFrame src/**/*.ts test/**/*.ts --fix --exclude src/**/*.d.ts",
+    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts' --exclude src/**/*.d.ts",
+    "lint-fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
     "prepush": "npm run build",
     "start": "npm run build:live"
