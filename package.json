@@ -12,6 +12,7 @@
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
     "lint": "tslint -t codeFrame src/**/*.ts test/**/*.ts --exclude src/**/*.d.ts",
+    "lint-fix": "tslint -t codeFrame src/**/*.ts test/**/*.ts --fix --exclude src/**/*.d.ts",
     "precommit": "lint-staged",
     "prepush": "npm run build",
     "start": "npm run build:live"
