@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
-import { Visualization } from '../../@types/zoomdata';
-import { Config } from '../../commands/config';
-import { strEnum } from '../../utilities';
+import { Visualization } from '../../../@types/zoomdata';
+import { Config } from '../../../commands/config';
+import { strEnum } from '../../../utilities';
 import * as includeQuestions from './include';
 import * as orderQuestions from './order';
 

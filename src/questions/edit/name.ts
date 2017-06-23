@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
-import { Visualization } from '../@types/zoomdata';
-import { Config } from '../commands/config';
-import { visualizations } from '../requests';
+import { Visualization } from '../../@types/zoomdata';
+import { Config } from '../../commands/config';
+import { visualizations } from '../../requests';
 import ora = require('ora');
 
 const questions: inquirer.Questions = [

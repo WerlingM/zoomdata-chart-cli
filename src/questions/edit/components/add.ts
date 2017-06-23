@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
-import { ComponentType, Visualization } from '../../@types/zoomdata';
-import { Config } from '../../commands/config';
-import { components } from '../../requests';
+import { ComponentType, Visualization } from '../../../@types/zoomdata';
+import { Config } from '../../../commands/config';
+import { components } from '../../../requests';
 import ora = require('ora');
 
 const componentTypeOptions: ComponentType[] = ['text/css', 'text/javascript'];

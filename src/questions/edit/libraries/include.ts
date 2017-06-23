@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
-import { Visualization } from '../../@types/zoomdata';
-import { Config } from '../../commands/config';
-import { libraries, visualizations } from '../../requests';
+import { Visualization } from '../../../@types/zoomdata';
+import { Config } from '../../../commands/config';
+import { libraries, visualizations } from '../../../requests';
 import ora = require('ora');
 
 const questions: inquirer.Question[] = [
@@ -39,7 +39,12 @@ function prompt(visualization: Visualization, serverConfig: Config) {
       questions[0].choices = ([
         new inquirer.Separator(' = Included Libraries: = '),
       ] as any)
-        .concat(visualization.libs)
+        .concat(
+          visualization.libs.map<inquirer.objects.ChoiceOption>(libId => {
+            const lib = libraries.find(library => library.id === libId);
+            return lib ? { name: lib.filename, value: lib.id } : libId;
+          }),
+        )
         .concat([new inquirer.Separator(' = Available Libraries: = ')] as any)
         .concat(
           libraries

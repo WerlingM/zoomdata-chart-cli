@@ -4,7 +4,7 @@ import * as program from 'commander';
 import * as prettyjson from 'prettyjson';
 import { getConfig } from './commands/config';
 import { pull } from './commands/pull';
-import * as selectQuestions from './questions/select';
+import * as selectQuestions from './questions/common/select';
 import { parseCredentials, parseUrl } from './utilities';
 
 program

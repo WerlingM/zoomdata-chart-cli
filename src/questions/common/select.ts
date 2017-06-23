@@ -1,8 +1,8 @@
 import * as inquirer from 'inquirer';
-import { Config } from '../commands/config';
-import { visualizations } from '../requests';
+import { Config } from '../../commands/config';
+import { visualizations } from '../../requests';
 import ora = require('ora');
-import { Visualization } from '../@types/zoomdata';
+import { Visualization } from '../../@types/zoomdata';
 
 // TODO Change questions type once ChoiceOption has been fixed
 const questions: Array<{ [key: string]: any }> = [

@@ -1,4 +1,6 @@
 import * as Preferences from 'preferences';
+import * as prettyjson from 'prettyjson';
+import * as configQuestions from '../questions/config';
 
 interface Config {
   application: string;
@@ -61,4 +63,11 @@ function getConfig(options: ConfigOptions): Config {
   };
 }
 
-export { Config, ConfigOptions, getConfig };
+function config() {
+  return configQuestions.prompt().catch(error => {
+    console.log(prettyjson.render);
+    return Promise.reject(error);
+  });
+}
+
+export { Config, ConfigOptions, getConfig, config };

@@ -1,7 +1,7 @@
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { Visualization } from '../@types/zoomdata';
-import { edit as editQuestions } from '../questions';
+import * as editQuestions from '../questions/edit';
 import { visualizations } from '../requests';
 import { Config } from './config';
 
