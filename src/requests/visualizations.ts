@@ -77,4 +77,19 @@ function update(visualizationId: string, body: any, serverConfig: Config) {
   return send(requestOptions);
 }
 
-export { get, getByName, getPkgBuffer, getCustom, update };
+function remove(visualizationId: string, serverConfig: Config): Promise<void> {
+  const { application, username, password } = serverConfig;
+  const url = `${application}/service/visualizations/${visualizationId}`;
+  const requestOptions: request.Options = {
+    auth: { username, password },
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    method: 'DELETE',
+    url,
+  };
+
+  return send<void>(requestOptions).catch(reason => {
+    return Promise.reject(reason);
+  });
+}
+
+export { get, getByName, getPkgBuffer, getCustom, update, remove };

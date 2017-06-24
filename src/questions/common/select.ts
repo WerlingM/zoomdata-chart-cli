@@ -36,4 +36,4 @@ function prompt(serverConfig: Config) {
     });
 }
 
-export { prompt };
+export { prompt, questions };

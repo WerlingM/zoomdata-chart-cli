@@ -2,6 +2,7 @@ import * as contentType from 'content-type';
 import * as http from 'http';
 import * as requestPromise from 'request-promise-native';
 import { parseJSON } from '../utilities';
+import * as bookmarks from './bookmarks';
 import * as components from './components';
 import * as libraries from './libraries';
 import * as visualizations from './visualizations';
@@ -40,4 +41,4 @@ function autoParse(body: any, response: http.IncomingMessage): any {
   }
 }
 
-export { send, visualizations, components, libraries };
+export { send, bookmarks, visualizations, components, libraries };

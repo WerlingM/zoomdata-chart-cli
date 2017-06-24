@@ -44,6 +44,7 @@
     "zd-chart-ls": "./dist/zoomdata-chart-ls.js",
     "zd-chart-pull": "./dist/zoomdata-chart-pull.js",
     "zd-chart-push": "./dist/zoomdata-chart-push.js",
+    "zd-chart-rm": "./dist/zoomdata-chart-rm.js",
     "zd-chart-watch": "./dist/zoomdata-chart-watch.js"
   },
   "keywords": [],
