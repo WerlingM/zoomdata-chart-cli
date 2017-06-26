@@ -36,7 +36,7 @@ program
   )
   .parse(process.argv);
 
-const { type, options } = program;
+const { type, ...options } = program.opts();
 const config = getConfig(options);
 
 if (!config.application || !config.username) {

@@ -29,7 +29,9 @@ program
   .option('--zip', 'Pull the custom chart in a zip file format')
   .parse(process.argv);
 
-const { dir, zip, ...options } = program;
+const { dir, ...options } = program.opts();
+const { zip } = program;
+console.log(zip);
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
