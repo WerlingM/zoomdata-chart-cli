@@ -8,7 +8,7 @@ import * as selectQuestions from '../common/select';
 import ora = require('ora');
 
 function answerHandler(visualization: Visualization, serverConfig: Config) {
-  bookmarks
+  return bookmarks
     .get(serverConfig, { visualizationId: visualization.id, fields: 'name' })
     .then(bookmarks => {
       if (bookmarks.bookmarksMap.length > 0) {
@@ -27,6 +27,7 @@ function answerHandler(visualization: Visualization, serverConfig: Config) {
             ),
           ),
         );
+        return Promise.resolve();
       } else {
         //noinspection ReservedWordAsName
         const confirm: inquirer.Questions = [
@@ -44,13 +45,18 @@ function answerHandler(visualization: Visualization, serverConfig: Config) {
             const spinner = ora(
               `Removing chart: ${visualization.name} from the server`,
             ).start();
-            visualizations
+            return visualizations
               .remove(visualization.id, serverConfig)
-              .then(() => spinner.succeed())
+              .then(() => {
+                spinner.succeed();
+                return Promise.resolve();
+              })
               .catch(error => {
                 spinner.fail();
                 return Promise.reject(error);
               });
+          } else {
+            return Promise.resolve();
           }
         });
       }

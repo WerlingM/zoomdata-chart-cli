@@ -13,20 +13,37 @@ program
     parseUrl,
   )
   .option(
+    '-t, --type [chart|library]',
+    'Set the type of object to remove. Valid options: "chart (default)", "library',
+    value => {
+      const valueLower = value.toLowerCase();
+      if (valueLower === 'chart' || valueLower === 'library') {
+        return valueLower;
+      } else {
+        console.log(
+          `Invalid object type: ${valueLower}. Please enter a valid type.`,
+        );
+        program.help();
+        process.exit(1);
+      }
+    },
+    'chart',
+  )
+  .option(
     '-u, --user [user:password]',
     'Specify the user name and password to use for server authentication.',
     parseCredentials,
   )
   .parse(process.argv);
 
-const { options } = program;
+const { type, options } = program;
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
   program.help();
   process.exit(1);
 } else {
-  rm(config).catch(() => {
+  rm(config, type).catch(() => {
     process.exit(1);
   });
 }

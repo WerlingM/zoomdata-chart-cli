@@ -28,20 +28,25 @@ function answerHandler(answers: inquirer.Answers, serverConfig: Config) {
       const spinner = ora(
         `Removing library: ${answers.library} from the server`,
       ).start();
-      libraries
+      return libraries
         .remove(answers.library, serverConfig)
-        .then(() => spinner.succeed())
+        .then(() => {
+          spinner.succeed();
+          return Promise.resolve();
+        })
         .catch(error => {
           spinner.fail();
           return Promise.reject(error);
         });
+    } else {
+      return Promise.resolve();
     }
   });
 }
 
 function prompt(serverConfig: Config) {
   const spinner = ora('Fetching libraries').start();
-  libraries
+  return libraries
     .get(serverConfig)
     .then(libraries => {
       spinner.succeed();
