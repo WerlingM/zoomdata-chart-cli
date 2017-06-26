@@ -12,6 +12,7 @@ console.log(
 program
   .version('1.0.0')
   .description('A CLI tool to manage Zoomdata Custom Charts')
+  .command('add', 'Add a custom chart or library to the Zoomdata server')
   .command(
     'config',
     "Set-up an encrypted configuration of Zoomdata's server URL and admin credentials",

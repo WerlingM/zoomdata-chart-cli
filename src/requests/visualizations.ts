@@ -1,3 +1,4 @@
+import { ReadStream } from 'fs';
 import * as request from 'request-promise-native';
 import { Visualization } from '../@types/zoomdata';
 import { Config } from '../commands/config';
@@ -63,6 +64,29 @@ function getByName(name: string, serverConfig: Config): Promise<Visualization> {
     });
 }
 
+function importPkg(
+  objectName: string,
+  fileData: ReadStream,
+  serverConfig: Config,
+): Promise<Visualization> {
+  const { application, username, password } = serverConfig;
+  const url = `${application}/service/visualizations/import`;
+  const requestOptions: request.Options = {
+    auth: { username, password },
+    formData: {
+      file: fileData,
+      visName: objectName,
+    },
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    method: 'POST',
+    url,
+  };
+
+  return send<Visualization>(requestOptions).catch(reason => {
+    return Promise.reject(reason);
+  });
+}
+
 function update(visualizationId: string, body: any, serverConfig: Config) {
   const { application, username, password } = serverConfig;
   const url = `${application}/service/visualizations/${visualizationId}`;
@@ -92,4 +116,4 @@ function remove(visualizationId: string, serverConfig: Config): Promise<void> {
   });
 }
 
-export { get, getByName, getPkgBuffer, getCustom, update, remove };
+export { get, getByName, getPkgBuffer, getCustom, importPkg, update, remove };

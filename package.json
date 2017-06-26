@@ -39,6 +39,7 @@
   },
   "bin": {
     "zd-chart": "./dist/zoomdata-chart.js",
+    "zd-chart-add": "./dist/zoomdata-chart-add.js",
     "zd-chart-config": "./dist/zoomdata-chart-config.js",
     "zd-chart-edit": "./dist/zoomdata-chart-edit.js",
     "zd-chart-ls": "./dist/zoomdata-chart-ls.js",
