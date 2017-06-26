@@ -65,7 +65,7 @@ function getConfig(options: ConfigOptions): Config {
 
 function config() {
   return configQuestions.prompt().catch(error => {
-    console.log(prettyjson.render);
+    console.log(prettyjson.render(error));
     return Promise.reject(error);
   });
 }

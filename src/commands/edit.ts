@@ -8,7 +8,7 @@ import { Config } from './config';
 function edit(nameOrVis: string | Visualization, serverConfig: Config) {
   if (typeof nameOrVis === 'object') {
     return editQuestions.prompt(nameOrVis, serverConfig).catch(error => {
-      console.log(prettyjson.render);
+      console.log(prettyjson.render(error));
       return Promise.reject(error);
     });
   }
@@ -21,7 +21,7 @@ function edit(nameOrVis: string | Visualization, serverConfig: Config) {
     })
     .catch(error => {
       spinner.fail();
-      console.log(prettyjson.render);
+      console.log(prettyjson.render(error));
       return Promise.reject(error);
     });
 }
