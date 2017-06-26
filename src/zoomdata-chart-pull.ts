@@ -26,9 +26,10 @@ program
     'Specify the user name and password to use for server authentication.',
     parseCredentials,
   )
+  .option('--zip', 'Pull the custom chart in a zip file format')
   .parse(process.argv);
 
-const { dir, ...options } = program;
+const { dir, zip, ...options } = program;
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
@@ -40,14 +41,14 @@ let visName;
 if (program.args.length === 0) {
   selectQuestions
     .prompt(config)
-    .then(visualization => pull(visualization, config, dir))
+    .then(visualization => pull(visualization, config, dir, zip))
     .catch(error => {
       console.log(prettyjson.render(error));
       process.exit(1);
     });
 } else {
   visName = program.args[0];
-  pull(visName, config, dir).catch(() => {
+  pull(visName, config, dir, zip).catch(() => {
     process.exit(1);
   });
 }

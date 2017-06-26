@@ -10,11 +10,12 @@ function pull(
   nameOrVis: string | Visualization,
   serverConfig: Config,
   dir?: string,
+  zip?: boolean,
 ) {
   const directory = dir ? dir : process.cwd();
   if (typeof nameOrVis === 'object') {
     const spinner = ora(`Pulling chart: ${nameOrVis.name}`).start();
-    return getPackage(nameOrVis, serverConfig, directory)
+    return getPackage(nameOrVis, serverConfig, directory, zip)
       .then(() => spinner.succeed())
       .catch(error => {
         spinner.fail();
@@ -47,11 +48,17 @@ function getPackage(
   visualization: Visualization,
   serverConfig: Config,
   dir: string,
+  zip?: boolean,
 ) {
   const visName = visualization.name.toLowerCase().replace(/ /g, '_');
   return getPkgBuffer(visualization.id, serverConfig)
     .then(buffer => writeFile(dir, `${visName}.zip`, buffer))
-    .then(() => unzipFile(`${dir}/${visName}.zip`, `${dir}/${visName}`, true));
+    .then(
+      () =>
+        zip
+          ? Promise.resolve(undefined)
+          : unzipFile(`${dir}/${visName}.zip`, `${dir}/${visName}`, true),
+    );
 }
 
 export { pull };
