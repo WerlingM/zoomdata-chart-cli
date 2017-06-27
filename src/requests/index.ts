@@ -23,7 +23,8 @@ function send<T>(requestOptions: requestPromise.Options): Promise<T> {
 function autoParse(body: any, response: http.IncomingMessage): any {
   if ((response as any).request.method === 'GET') {
     if (
-      contentType.parse(response).type === 'application/vnd.zoomdata.v2+json'
+      contentType.parse(response.headers['content-type']).type ===
+      'application/vnd.zoomdata.v2+json'
     ) {
       const parsedJSON = parseJSON(body);
       if (parsedJSON instanceof Error) {
@@ -32,7 +33,8 @@ function autoParse(body: any, response: http.IncomingMessage): any {
         return parsedJSON;
       }
     } else if (
-      contentType.parse(response).type === 'application/octet-stream'
+      contentType.parse(response.headers['content-type']).type ===
+      'application/octet-stream'
     ) {
       return body;
     } else {
