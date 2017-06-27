@@ -31,7 +31,6 @@ program
 
 const { dir, ...options } = program.opts();
 const { zip } = program;
-console.log(zip);
 const config = getConfig(options);
 
 if (!config.application || !config.username) {
