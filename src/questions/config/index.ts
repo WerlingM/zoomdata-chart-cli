@@ -32,6 +32,7 @@ const questions: inquirer.Questions = [
     },
   },
   {
+    mask: '*',
     message: "Enter the username's password ",
     name: 'password',
     type: 'password',
