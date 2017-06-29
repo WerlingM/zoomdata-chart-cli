@@ -70,10 +70,10 @@
     "husky": "^0.14.1",
     "lint-staged": "^4.0.0",
     "nodemon": "^1.11.0",
-    "prettier": "^1.4.4",
+    "prettier": "^1.5.1",
     "ts-node": "^3.0.6",
     "tslint": "^5.4.3",
-    "typescript": "^2.3.4",
+    "typescript": "^2.4.1",
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
