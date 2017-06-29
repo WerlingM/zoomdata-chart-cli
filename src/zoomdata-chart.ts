@@ -17,6 +17,7 @@ program
     'config',
     "Set-up an encrypted configuration of Zoomdata's server URL and admin credentials",
   )
+  .command('create', 'Create a new custom chart in the Zoomdata server')
   .command(
     'edit [chartname]',
     "Edit a custom chart's controls, components, libraries, name, variables, and/or visibility",

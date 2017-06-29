@@ -27,6 +27,20 @@ function getPkgBuffer(
   return send<Buffer>(requestOptions);
 }
 
+function create(body: string, serverConfig: Config) {
+  const { application, username, password } = serverConfig;
+  const url = `${application}/service/visualizations`;
+  const requestOptions: request.Options = {
+    auth: { username, password },
+    body,
+    headers: { 'content-type': 'application/vnd.zoomdata.v2+json' },
+    method: 'POST',
+    url,
+  };
+
+  return send(requestOptions);
+}
+
 function get(
   serverConfig: Config,
   queryOptions?: GetParameters,
@@ -41,6 +55,12 @@ function get(
   };
 
   return send(requestOptions);
+}
+
+function getBuiltIn(serverConfig: Config) {
+  return get(serverConfig, { builtIn: true }).catch(reason => {
+    return Promise.reject(reason);
+  });
 }
 
 function getCustom(serverConfig: Config) {
@@ -116,4 +136,14 @@ function remove(visualizationId: string, serverConfig: Config): Promise<void> {
   });
 }
 
-export { get, getByName, getPkgBuffer, getCustom, importPkg, update, remove };
+export {
+  create,
+  get,
+  getBuiltIn,
+  getByName,
+  getPkgBuffer,
+  getCustom,
+  importPkg,
+  update,
+  remove,
+};

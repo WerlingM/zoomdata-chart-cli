@@ -41,6 +41,7 @@
     "zd-chart": "./dist/zoomdata-chart.js",
     "zd-chart-add": "./dist/zoomdata-chart-add.js",
     "zd-chart-config": "./dist/zoomdata-chart-config.js",
+    "zd-chart-create": "./dist/zoomdata-chart-create.js",
     "zd-chart-edit": "./dist/zoomdata-chart-edit.js",
     "zd-chart-ls": "./dist/zoomdata-chart-ls.js",
     "zd-chart-pull": "./dist/zoomdata-chart-pull.js",
