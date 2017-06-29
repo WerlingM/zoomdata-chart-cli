@@ -21,7 +21,7 @@ function answerHandler(
     component => answers.component === component.id,
   );
 
-  components
+  return components
     .getById(answers.component, visualization.id, serverConfig)
     .then(component => {
       component.visualizationId = visualization.id;
@@ -34,14 +34,14 @@ function answerHandler(
         },
       ];
 
-      inquirer.prompt(editorQuestion).then(editorAnswer => {
+      return inquirer.prompt(editorQuestion).then(editorAnswer => {
         const spinner = ora(
           `Updating component ${componentToEdit
             ? componentToEdit.name
             : ''} in: ${visualization.name}`,
         ).start();
 
-        components
+        return components
           .updateBody(component, editorAnswer.componentBody, serverConfig)
           .then(() => spinner.succeed())
           .catch(error => {

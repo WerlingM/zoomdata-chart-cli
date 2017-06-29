@@ -33,7 +33,7 @@ function answerHandler(
   const spinner = ora(
     `Adding component ${answers.componentName} to: ${visualization.name}`,
   ).start();
-  components
+  return components
     .create(visualization.id, body, serverConfig)
     .then(() => spinner.succeed())
     .catch(error => {

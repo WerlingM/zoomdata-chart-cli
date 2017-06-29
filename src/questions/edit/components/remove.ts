@@ -25,7 +25,7 @@ function answerHandler(
       ? componentToDelete.name
       : ''} from: ${visualization.name}`,
   ).start();
-  components
+  return components
     .remove(visualization.id, answers.component, serverConfig)
     .then(() => spinner.succeed())
     .catch(error => {
