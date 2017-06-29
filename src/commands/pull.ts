@@ -30,7 +30,7 @@ function pull(
     .then(visualization => {
       spinner.succeed();
       spinner = ora(`Pulling chart: ${nameOrVis}`).start();
-      return getPackage(visualization, serverConfig, directory)
+      return getPackage(visualization, serverConfig, directory, zip)
         .then(() => spinner.succeed())
         .catch(error => {
           spinner.fail();
