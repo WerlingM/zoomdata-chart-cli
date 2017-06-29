@@ -4,7 +4,7 @@ import { Config } from '../../commands/config';
 import { visualizations } from '../../requests';
 import ora = require('ora');
 
-const questions: inquirer.Questions = [
+const questions: inquirer.Question[] = [
   {
     message: 'Please enter a new name for the chart:',
     name: 'name',
@@ -29,6 +29,7 @@ function answerHandler(
 }
 
 function prompt(visualization: Visualization, serverConfig: Config) {
+  questions[0].default = visualization.name;
   return inquirer
     .prompt(questions)
     .then(answers => answerHandler(answers, visualization, serverConfig));
