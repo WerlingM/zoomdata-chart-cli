@@ -48,9 +48,9 @@ function prompt(serverConfig: Config) {
   const spinner = ora('Fetching libraries').start();
   return libraries
     .get(serverConfig)
-    .then(libraries => {
+    .then(libs => {
       spinner.succeed();
-      questions[0].choices = libraries
+      questions[0].choices = libs
         .filter(library => typeof library.accountId !== 'undefined')
         .sort((a, b) => (a.filename < b.filename ? -1 : 1))
         .map<inquirer.objects.ChoiceOption>(library => ({

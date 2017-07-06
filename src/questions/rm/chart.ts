@@ -10,8 +10,8 @@ import ora = require('ora');
 function answerHandler(visualization: Visualization, serverConfig: Config) {
   return bookmarks
     .get(serverConfig, { visualizationId: visualization.id, fields: 'name' })
-    .then(bookmarks => {
-      if (bookmarks.bookmarksMap.length > 0) {
+    .then(bmks => {
+      if (bmks.bookmarksMap.length > 0) {
         console.log(
           `${chalk.red(
             visualization.name,
@@ -22,9 +22,7 @@ function answerHandler(visualization: Visualization, serverConfig: Config) {
         );
         console.log(
           chalk.yellow(
-            prettyjson.render(
-              bookmarks.bookmarksMap.map(bookmark => bookmark.name),
-            ),
+            prettyjson.render(bmks.bookmarksMap.map(bookmark => bookmark.name)),
           ),
         );
         return Promise.resolve();

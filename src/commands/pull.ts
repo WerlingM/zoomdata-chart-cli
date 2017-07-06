@@ -14,11 +14,11 @@ function pull(
 ) {
   const directory = dir ? dir : process.cwd();
   if (typeof nameOrVis === 'object') {
-    const spinner = ora(`Pulling chart: ${nameOrVis.name}`).start();
+    const pullSpinner = ora(`Pulling chart: ${nameOrVis.name}`).start();
     return getPackage(nameOrVis, serverConfig, directory, zip)
-      .then(() => spinner.succeed())
+      .then(() => pullSpinner.succeed())
       .catch(error => {
-        spinner.fail();
+        pullSpinner.fail();
         console.log(prettyjson.render(error));
         return Promise.reject(error);
       });

@@ -34,7 +34,7 @@ function prompt(visualization: Visualization, serverConfig: Config) {
   const spinner = ora('Fetching libraries').start();
   return libraries
     .get(serverConfig)
-    .then(libraries => {
+    .then(libs => {
       spinner.succeed();
       questions[0].choices = ([
         new inquirer.Separator(' = Included Libraries: = '),
@@ -43,13 +43,13 @@ function prompt(visualization: Visualization, serverConfig: Config) {
           visualization.libs.map<
             inquirer.objects.ChoiceOption | string
           >(libId => {
-            const lib = libraries.find(library => library.id === libId);
+            const lib = libs.find(library => library.id === libId);
             return lib ? { name: lib.filename, value: lib.id } : libId;
           }),
         )
         .concat([new inquirer.Separator(' = Available Libraries: = ')] as any)
         .concat(
-          libraries
+          libs
             .map<inquirer.objects.ChoiceOption>(library => ({
               name: library.filename,
               value: library.id,
