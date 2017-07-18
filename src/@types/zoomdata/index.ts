@@ -1,4 +1,5 @@
 import { strEnum } from '../../utilities';
+import * as Variables from './variables';
 
 export interface Visualization {
   id: string;
@@ -13,7 +14,7 @@ export interface Visualization {
   objectFieldTypes: string[];
   controls: string[];
   thumbnailId: string;
-  variables: any[];
+  variables: Variables.VariableDef[];
   schemas: any;
   links: any[];
 }
@@ -203,3 +204,5 @@ export interface ControlDef {
 export const componentTypes = strEnum(['text/css', 'text/javascript']);
 
 export type ComponentType = keyof typeof componentTypes;
+
+export { Variables };
