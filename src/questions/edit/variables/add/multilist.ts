@@ -67,7 +67,7 @@ function answerHandler(
             ];
             return inquirer.prompt(defaultQuestion).then(defaultAnswers => {
               return resolve({
-                defaultValue: defaultAnswers.defaultValue,
+                defaultValue: { name: defaultAnswers.defaultValue },
                 values: itemNames,
               });
             });
@@ -77,7 +77,6 @@ function answerHandler(
     }
     resolve();
   }).then(itemOptions => {
-    console.log(itemOptions);
     const variableDef: Variables.Multilist = {
       ...varOpts,
       ...{

@@ -15,7 +15,7 @@ program
   )
   .option(
     '-t, --type [chart|library]',
-    'Set the type of object to remove. Valid options: "chart (default)", "library',
+    'Set the type of object to add. Valid options: "chart (default)", "library"',
     value => {
       const valueLower = value.toLowerCase();
       if (valueLower === 'chart' || valueLower === 'library') {
