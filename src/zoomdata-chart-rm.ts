@@ -39,7 +39,11 @@ program
 const { type, ...options } = program.opts();
 const config = getConfig(options);
 
-if (!config.application || !config.username) {
+if (
+  !config.application ||
+  (config.application as any) instanceof Error ||
+  !config.username
+) {
   program.help();
   process.exit(1);
 } else {
