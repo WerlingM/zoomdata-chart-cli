@@ -1,0 +1,7 @@
+{
+  "extends": "../tsconfig",
+  "compileOnSave": false,
+  "include": [
+    "**/*.ts"
+  ]
+}
