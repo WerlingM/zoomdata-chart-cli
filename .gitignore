@@ -2,4 +2,4 @@
 *.log
 /dist
 /.alm
-package-lock.json
+/coverage/
