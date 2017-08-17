@@ -1,11 +1,11 @@
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { bookmarks, visualizations } from '../../requests';
 import * as selectQuestions from '../common/select';
-import ora = require('ora');
 
 function answerHandler(visualization: Visualization, serverConfig: Config) {
   return bookmarks

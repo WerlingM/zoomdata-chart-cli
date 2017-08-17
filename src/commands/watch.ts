@@ -1,11 +1,11 @@
 import * as chokidar from 'chokidar';
+import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { Component } from '../@types/zoomdata';
-import { Config } from './config';
-import { getVisConfig } from './push';
-import ora = require('ora');
 import { updateBody } from '../requests/components';
 import { readFile } from '../utilities';
+import { Config } from './config';
+import { getVisConfig } from './push';
 
 function watchComponents(components: Component[], config: Config, dir: string) {
   return Promise.all(

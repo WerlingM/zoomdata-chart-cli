@@ -1,9 +1,9 @@
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import { Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
-import { visualizations } from '../../requests';
-import ora = require('ora');
 import { edit } from '../../commands/edit';
+import { visualizations } from '../../requests';
 
 const questions: inquirer.Question[] = [
   {

@@ -1,8 +1,8 @@
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import { Visualization } from '../../../@types/zoomdata';
 import { Config } from '../../../commands/config';
 import { visualizations } from '../../../requests';
-import ora = require('ora');
 
 const componentsSelected: string[] = [];
 
@@ -38,7 +38,7 @@ function prompt(visualization: Visualization, serverConfig: Config) {
         } else {
           visualization.components.sort((a, b) => {
             return componentsSelected.indexOf(a.id) <
-              componentsSelected.indexOf(b.id)
+            componentsSelected.indexOf(b.id)
               ? -1
               : 1;
           });

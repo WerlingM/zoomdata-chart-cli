@@ -1,8 +1,8 @@
 import * as extractZip from 'extract-zip';
-import * as Url from 'url';
-import attempt = require('lodash.attempt');
 import * as fs from 'fs';
+import attempt = require('lodash.attempt');
 import { error, rm } from 'shelljs';
+import * as Url from 'url';
 
 function parseJSON(str: string) {
   return attempt(JSON.parse, str);
@@ -11,19 +11,26 @@ function parseJSON(str: string) {
 function parseCredentials(value: string) {
   const username = value.split(':')[0];
   const password = value.split(':')[1];
+  try {
+    if (typeof username !== 'string' || username === '') {
+      console.log(
+        'The username entered is either empty or in an invalid format.',
+      );
+      throw new Error(
+        'The username entered is either empty or in an invalid format.',
+      );
+    }
 
-  if (typeof username !== 'string' || username === '') {
-    console.log(
-      'The username entered is either empty or in an invalid format.',
-    );
-    process.exit(1);
-  }
-
-  if (typeof password !== 'string' || password === '') {
-    console.log(
-      'The password entered is either empty or in an invalid format.',
-    );
-    process.exit(1);
+    if (typeof password !== 'string' || password === '') {
+      console.log(
+        'The password entered is either empty or in an invalid format.',
+      );
+      throw new Error(
+        'The password entered is either empty or in an invalid format.',
+      );
+    }
+  } catch (error) {
+    return error;
   }
 
   return { username, password };
@@ -31,11 +38,16 @@ function parseCredentials(value: string) {
 
 function parseUrl(value: string) {
   const urlObj = Url.parse(value);
-  if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
-    console.log('The URL entered is either empty or in an invalid format.');
-    process.exit(1);
+  try {
+    if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+      console.log('The URL entered is either empty or in an invalid format.');
+      throw new Error(
+        'The URL entered is either empty or in an invalid format.',
+      );
+    }
+  } catch (error) {
+    return error;
   }
-
   return value;
 }
 

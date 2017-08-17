@@ -1,8 +1,8 @@
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import { ControlDef, Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { visualizations } from '../../requests';
-import ora = require('ora');
 
 const controls: ControlDef[] = [
   {

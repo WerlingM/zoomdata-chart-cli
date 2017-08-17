@@ -1,8 +1,8 @@
 import * as fs from 'fs';
+import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { libraries, visualizations } from '../requests';
 import { Config } from './config';
-import ora = require('ora');
 
 function add(
   objectName: string,

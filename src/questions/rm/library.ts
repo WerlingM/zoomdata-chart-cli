@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import { Config } from '../../commands/config';
 import { libraries } from '../../requests';
-import ora = require('ora');
 
 const questions: inquirer.Question[] = [
   {

@@ -1,10 +1,10 @@
+import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { Visualization } from '../@types/zoomdata';
 import { visualizations } from '../requests';
 import { getPkgBuffer } from '../requests/visualizations';
 import { unzipFile, writeFile } from '../utilities';
 import { Config } from './config';
-import ora = require('ora');
 
 function pull(
   nameOrVis: string | Visualization,

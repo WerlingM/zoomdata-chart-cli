@@ -1,8 +1,8 @@
-import { Config } from './config';
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { visualizations } from '../requests';
 import { parseJSON, readFile, writeFile } from '../utilities';
+import { Config } from './config';
 const VIS_FILE_NAME = 'visualization.json';
 
 function getVisConfig(dir: string) {

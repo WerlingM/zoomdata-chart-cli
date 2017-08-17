@@ -1,9 +1,9 @@
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
+import ora = require('ora');
 import * as textTable from 'text-table';
 import { Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
-import ora = require('ora');
 
 const questions: inquirer.Question[] = [
   {

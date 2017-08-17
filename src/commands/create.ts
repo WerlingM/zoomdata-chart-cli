@@ -1,8 +1,8 @@
+import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import * as createQuestions from '../questions/create';
 import { visualizations } from '../requests';
 import { Config } from './config';
-import ora = require('ora');
 
 function create(serverConfig: Config) {
   const spinner = ora('Fetching templates').start();
