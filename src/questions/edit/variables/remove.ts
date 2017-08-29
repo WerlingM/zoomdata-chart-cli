@@ -1,6 +1,7 @@
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
 import ora = require('ora');
+import stripAnsi = require('strip-ansi');
 import * as textTable from 'text-table';
 import { Visualization } from '../../../@types/zoomdata';
 import { Config } from '../../../commands/config';
@@ -58,7 +59,7 @@ function answerHandler(
 
 function prompt(visualization: Visualization, serverConfig: Config) {
   const table = textTable(
-    [['Name', 'Type', 'Description']].concat(
+    [['Name', 'Type', 'Description'].map(str => chalk.yellow(str))].concat(
       visualization.variables.map<string[]>(variable => [
         variable.name,
         variable.type,
@@ -68,13 +69,14 @@ function prompt(visualization: Visualization, serverConfig: Config) {
     {
       align: ['l', 'l', 'l'],
       hsep: '|',
+      stringLength: str => stripAnsi(str).length,
     },
   );
   const tableRows = table.split('\n');
-  questions[0].choices = ([
-    new inquirer.Separator(chalk.yellow(tableRows[0])),
-  ] as any)
-    .concat([new inquirer.Separator('-'.repeat(tableRows[0].length))])
+  questions[0].choices = ([new inquirer.Separator(tableRows[0])] as any)
+    .concat([
+      new inquirer.Separator('-'.repeat(stripAnsi(tableRows[0]).length)),
+    ])
     .concat(
       tableRows.slice(1).map<inquirer.objects.ChoiceOption>((row, index) => ({
         name: row,

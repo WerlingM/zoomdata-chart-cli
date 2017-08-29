@@ -4,11 +4,10 @@ import { Config } from '../../../commands/config';
 import { strEnum } from '../../../utilities';
 import * as addQuestions from './add';
 import * as editQuestions from './edit';
+import { listVariables } from './list';
 import * as removeQuestions from './remove';
 
-const variableOptions = strEnum(['Add', 'Edit', 'Remove']);
-
-type VariableOption = keyof typeof variableOptions;
+const variableOptions = strEnum(['Add', 'Edit', 'List', 'Remove']);
 
 interface ComponentChoiceOption extends inquirer.objects.ChoiceOption {
   name: string;
@@ -24,6 +23,10 @@ const options: ComponentChoiceOption[] = [
   //   name: 'Edit a variable',
   //   value: 'Edit',
   // },
+  {
+    name: 'List variables',
+    value: 'List',
+  },
   {
     name: 'Remove a variable',
     value: 'Remove',
@@ -49,6 +52,9 @@ function answerHandler(
       return addQuestions.prompt(visualization, serverConfig);
     // case variableOptions.Edit:
     //   return editQuestions.prompt(visualization, serverConfig);
+    case variableOptions.List:
+      return listVariables(visualization);
+
     case variableOptions.Remove:
       return removeQuestions.prompt(visualization, serverConfig);
   }
