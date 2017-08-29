@@ -22,7 +22,7 @@ function answerHandler(
   const variableDef: Variables.Float = {
     ...varOpts,
     ...{
-      defaultValue: answers.defaultValue,
+      defaultValue: parseFloat(answers.defaultValue),
       type: 'float',
       visualizationId: visualization.id,
     },
