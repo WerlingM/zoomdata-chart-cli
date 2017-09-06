@@ -1,8 +1,10 @@
 {
   "name": "zoomdata-chart-cli",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "A CLI tool to manage Zoomdata Custom Charts",
   "main": "./dist/zoomdata-chart.js",
+  "author": "Jonathan Avila <avilajonathan@gmail.com>",
+  "repository": "https://github.com/jonavila/zoomdata-chart-cli",
   "files": [
     "dist"
   ],
@@ -79,8 +81,11 @@
     "zd-chart-rm": "./dist/zoomdata-chart-rm.js",
     "zd-chart-watch": "./dist/zoomdata-chart-watch.js"
   },
-  "keywords": [],
-  "author": "Jonathan Avila <avilajonathan@gmail.com>",
+  "keywords": [
+    "zoomdata",
+    "charts",
+    "cli"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/chalk": "^0.4.31",
