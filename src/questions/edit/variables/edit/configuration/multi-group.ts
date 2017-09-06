@@ -1,18 +1,22 @@
 import * as inquirer from 'inquirer';
 import ora = require('ora');
-import { Variables, Visualization } from '../../../../@types/zoomdata';
-import { Config } from '../../../../commands/config';
-import { visualizations } from '../../../../requests';
-import { questions } from '../common/multi-group';
+import { Variables, Visualization } from '../../../../../@types/zoomdata/index';
+import { MultiGroup } from '../../../../../@types/zoomdata/variables';
+import { Config } from '../../../../../commands/config';
+import { visualizations } from '../../../../../requests';
+import { questions } from '../../common/multi-group';
 
 const options = ['NONE', 'ATTRIBUTE', 'TIME'];
 
 function answerHandler(
   answers: inquirer.Answers,
-  varOpts: Variables.Core,
+  variable: MultiGroup,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  const currentVariable = visualization.variables.find(
+    currVariable => currVariable.id === variable.id,
+  );
   const levelQuestions: inquirer.Question[] = [];
   const groupLevels = parseInt(answers.groupLevels, 10);
   for (let i = 1; i <= groupLevels; i++) {
@@ -65,19 +69,11 @@ function answerHandler(
         groupNames.push(levelAnswers[`groupLevelName${i}`]);
         groupTypes.push(levelAnswers[`attributeType${i}`].join(' '));
       }
-      const variableDef: Variables.MultiGroup = {
-        ...varOpts,
-        ...{
-          attributeType: ['ATTRIBUTE', 'TIME'],
-          config: {
-            groupLevel: groupLevels,
-            groupLimits: [50, 20],
-            groupNames,
-            groupTypes,
-          },
-          type: 'multi-group',
-          visualizationId: visualization.id,
-        },
+      (currentVariable as MultiGroup).config = {
+        groupLevel: groupLevels,
+        groupLimits: [50, 20],
+        groupNames,
+        groupTypes,
       };
 
       if (colorLevel) {
@@ -86,14 +82,14 @@ function answerHandler(
           colorGroupIndex: (colorLevel as number) - 1,
           groupColorSet: 'ZoomPalette',
         };
-        Object.assign(variableDef.config, colorConfig);
+        Object.assign((currentVariable as MultiGroup).config, colorConfig);
+      } else {
+        delete (currentVariable as MultiGroup).config.autoShowColorLegend;
+        delete (currentVariable as MultiGroup).config.colorGroupIndex;
+        delete (currentVariable as MultiGroup).config.groupColorSet;
       }
 
-      visualization.variables.push(variableDef);
-
-      const spinner = ora(
-        `Adding variable ${varOpts.name} to: ${visualization.name}`,
-      ).start();
+      const spinner = ora(`Updating variable: ${variable.name}`).start();
       return visualizations
         .update(visualization.id, JSON.stringify(visualization), serverConfig)
         .then(() => spinner.succeed())
@@ -106,14 +102,15 @@ function answerHandler(
 }
 
 function prompt(
-  varOpts: Variables.Core,
+  variable: MultiGroup,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  questions[0].default = variable.config.groupLevel;
   return inquirer
     .prompt(questions)
     .then(answers =>
-      answerHandler(answers, varOpts, visualization, serverConfig),
+      answerHandler(answers, variable, visualization, serverConfig),
     );
 }
 

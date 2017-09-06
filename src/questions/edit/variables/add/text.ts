@@ -3,14 +3,7 @@ import ora = require('ora');
 import { Variables, Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
 import { visualizations } from '../../../../requests';
-
-const questions: inquirer.Question[] = [
-  {
-    message: 'Enter a default value for this variable. Empty values are valid:',
-    name: 'defaultValue',
-    type: 'input',
-  },
-];
+import { questions } from '../common/text';
 
 function answerHandler(
   answers: inquirer.Answers,

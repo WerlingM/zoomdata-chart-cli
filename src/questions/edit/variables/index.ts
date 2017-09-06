@@ -19,10 +19,10 @@ const options: ComponentChoiceOption[] = [
     name: 'Add a new variable',
     value: 'Add',
   },
-  // {
-  //   name: 'Edit a variable',
-  //   value: 'Edit',
-  // },
+  {
+    name: 'Edit a variable',
+    value: 'Edit',
+  },
   {
     name: 'List variables',
     value: 'List',
@@ -50,8 +50,8 @@ function answerHandler(
   switch (answers.variables) {
     case variableOptions.Add:
       return addQuestions.prompt(visualization, serverConfig);
-    // case variableOptions.Edit:
-    //   return editQuestions.prompt(visualization, serverConfig);
+    case variableOptions.Edit:
+      return editQuestions.prompt(visualization, serverConfig);
     case variableOptions.List:
       return listVariables(visualization);
 

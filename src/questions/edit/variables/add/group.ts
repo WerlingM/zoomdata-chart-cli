@@ -3,32 +3,7 @@ import ora = require('ora');
 import { Variables, Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
 import { visualizations } from '../../../../requests';
-
-const options = [
-  {
-    name: 'ATTRIBUTE & TIME',
-    value: ['ATTRIBUTE', 'TIME'],
-  },
-  {
-    name: 'TIME',
-    value: ['TIME'],
-  },
-];
-
-const questions: inquirer.Question[] = [
-  {
-    choices: options,
-    message: 'Select the field types allowed when configuring this variable:',
-    name: 'attributeType',
-    type: 'list',
-  },
-  {
-    default: false,
-    message: 'Will this variable drive color in your chart?:',
-    name: 'colorFlag',
-    type: 'confirm',
-  },
-];
+import { questions } from '../common/group';
 
 function answerHandler(
   answers: inquirer.Answers,

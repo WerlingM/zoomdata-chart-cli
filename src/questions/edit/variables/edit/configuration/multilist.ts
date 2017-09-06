@@ -1,16 +1,20 @@
 import * as inquirer from 'inquirer';
 import ora = require('ora');
-import { Variables, Visualization } from '../../../../@types/zoomdata';
-import { Config } from '../../../../commands/config';
-import { visualizations } from '../../../../requests';
-import { questions } from '../common/multilist';
+import { Visualization } from '../../../../../@types/zoomdata/index';
+import { Multilist } from '../../../../../@types/zoomdata/variables';
+import { Config } from '../../../../../commands/config';
+import { visualizations } from '../../../../../requests';
+import { questions } from '../../common/multilist';
 
 function answerHandler(
   answers: inquirer.Answers,
-  varOpts: Variables.Core,
+  variable: Multilist,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  const currentVariable = visualization.variables.find(
+    currVariable => currVariable.id === variable.id,
+  );
   return new Promise((resolve, reject) => {
     if (answers.listType === 'CUSTOM') {
       const customQuestion: inquirer.Question[] = [
@@ -65,25 +69,15 @@ function answerHandler(
     }
     resolve();
   }).then(itemOptions => {
-    const variableDef: Variables.Multilist = {
-      ...varOpts,
-      ...{
-        type: 'multilist',
-        visualizationId: visualization.id,
-      },
-    };
-
     if (itemOptions) {
-      Object.assign(variableDef, itemOptions);
+      Object.assign(currentVariable, itemOptions);
+      delete (currentVariable as Multilist).attributeType;
     } else {
-      Object.assign(variableDef, { attributeType: ['ATTRIBUTE'] });
+      Object.assign(currentVariable, { attributeType: ['ATTRIBUTE'] });
+      (currentVariable as Multilist).defaultValue = [];
+      delete (currentVariable as Multilist).values;
     }
-
-    visualization.variables.push(variableDef);
-
-    const spinner = ora(
-      `Adding variable ${varOpts.name} to: ${visualization.name}`,
-    ).start();
+    const spinner = ora(`Updating variable: ${variable.name}`).start();
     return visualizations
       .update(visualization.id, JSON.stringify(visualization), serverConfig)
       .then(() => spinner.succeed())
@@ -95,14 +89,18 @@ function answerHandler(
 }
 
 function prompt(
-  varOpts: Variables.Core,
+  variable: Multilist,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  questions[0].default =
+    variable.attributeType && variable.attributeType.indexOf('ATTRIBUTE') >= 0
+      ? 'ATTRIBUTE'
+      : 'CUSTOM';
   return inquirer
     .prompt(questions)
     .then(answers =>
-      answerHandler(answers, varOpts, visualization, serverConfig),
+      answerHandler(answers, variable, visualization, serverConfig),
     );
 }
 

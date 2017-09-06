@@ -1,9 +1,13 @@
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
-import ora = require('ora');
+import stripAnsi = require('strip-ansi');
 import * as textTable from 'text-table';
 import { Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
+import { strEnum } from '../../../../utilities/index';
+import * as configurationQuestions from './configuration';
+import * as descriptionQuestions from './description';
+import * as nameQuestions from './name';
 
 const questions: inquirer.Question[] = [
   {
@@ -18,12 +22,61 @@ function answerHandler(
   visualization: Visualization,
   serverConfig: Config,
 ) {
-  console.log(answers);
+  const variableToEdit = visualization.variables.find(
+    variable => variable.name === answers.variable,
+  );
+  if (variableToEdit) {
+    const editOptions = strEnum(['Name', 'Description', 'Configuration']);
+
+    type editOption = keyof typeof editOptions;
+
+    const options: editOption[] = ['Name', 'Description'];
+
+    const editQuestions: inquirer.Questions = [
+      {
+        choices: options,
+        message: 'What would you like to edit:',
+        name: 'editOptions',
+        type: 'list',
+      },
+    ];
+
+    if (
+      variableToEdit.type !== 'box-plot-metric' &&
+      variableToEdit.type !== 'histogram-group' &&
+      variableToEdit.type !== 'ungroupedList'
+    ) {
+      options.push('Configuration');
+    }
+
+    return inquirer.prompt(editQuestions).then(editAnswers => {
+      switch (editAnswers.editOptions) {
+        case editOptions.Name:
+          return nameQuestions.prompt(
+            variableToEdit,
+            visualization,
+            serverConfig,
+          );
+        case editOptions.Description:
+          return descriptionQuestions.prompt(
+            variableToEdit,
+            visualization,
+            serverConfig,
+          );
+        case editOptions.Configuration:
+          return configurationQuestions.prompt(
+            variableToEdit,
+            visualization,
+            serverConfig,
+          );
+      }
+    });
+  }
 }
 
 function prompt(visualization: Visualization, serverConfig: Config) {
   const table = textTable(
-    [['Name', 'Type', 'Description']].concat(
+    [['Name', 'Type', 'Description'].map(str => chalk.yellow(str))].concat(
       visualization.variables.map<string[]>(variable => [
         variable.name,
         variable.type,
@@ -33,11 +86,12 @@ function prompt(visualization: Visualization, serverConfig: Config) {
     {
       align: ['l', 'l', 'l'],
       hsep: '|',
+      stringLength: str => stripAnsi(str).length,
     },
   );
   const tableRows = table.split('\n');
   questions[0].choices = ([
-    new inquirer.Separator(chalk.yellow(tableRows[0])),
+    new inquirer.Separator(chalk.green(tableRows[0])),
   ] as any)
     .concat([new inquirer.Separator('-'.repeat(tableRows[0].length))])
     .concat(

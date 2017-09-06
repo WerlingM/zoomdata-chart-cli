@@ -1,16 +1,20 @@
 import * as inquirer from 'inquirer';
 import ora = require('ora');
-import { Variables, Visualization } from '../../../../@types/zoomdata';
-import { Config } from '../../../../commands/config';
-import { visualizations } from '../../../../requests';
-import { questions } from '../common/singlelist';
+import { Visualization } from '../../../../../@types/zoomdata/index';
+import { Singlelist } from '../../../../../@types/zoomdata/variables';
+import { Config } from '../../../../../commands/config';
+import { visualizations } from '../../../../../requests';
+import { questions } from '../../common/singlelist';
 
 function answerHandler(
   answers: inquirer.Answers,
-  varOpts: Variables.Core,
+  variable: Singlelist,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  const currentVariable = visualization.variables.find(
+    currVariable => currVariable.id === variable.id,
+  );
   const itemQuestions: inquirer.Question[] = [];
   const itemNumber = parseInt(answers.itemNumber, 10);
   for (let i = 1; i <= itemNumber; i++) {
@@ -20,7 +24,6 @@ function answerHandler(
       type: 'input',
     });
   }
-
   return inquirer.prompt(itemQuestions).then(itemAnswers => {
     const itemNames: string[] = [];
     for (let i = 1; i <= itemNumber; i++) {
@@ -35,21 +38,11 @@ function answerHandler(
       },
     ];
     return inquirer.prompt(defaultQuestion).then(defaultAnswers => {
-      const variableDef: Variables.Singlelist = {
-        ...varOpts,
-        ...{
-          defaultValue: defaultAnswers.defaultValue,
-          type: 'singlelist',
-          values: itemNames,
-          visualizationId: visualization.id,
-        },
-      };
+      (currentVariable as Singlelist).defaultValue =
+        defaultAnswers.defaultValue;
+      (currentVariable as Singlelist).values = itemNames;
 
-      visualization.variables.push(variableDef);
-
-      const spinner = ora(
-        `Adding variable ${varOpts.name} to: ${visualization.name}`,
-      ).start();
+      const spinner = ora(`Updating variable: ${variable.name}`).start();
       return visualizations
         .update(visualization.id, JSON.stringify(visualization), serverConfig)
         .then(() => spinner.succeed())
@@ -62,14 +55,15 @@ function answerHandler(
 }
 
 function prompt(
-  varOpts: Variables.Core,
+  variable: Singlelist,
   visualization: Visualization,
   serverConfig: Config,
 ) {
+  questions[0].default = variable.values.length;
   return inquirer
     .prompt(questions)
     .then(answers =>
-      answerHandler(answers, varOpts, visualization, serverConfig),
+      answerHandler(answers, variable, visualization, serverConfig),
     );
 }
 

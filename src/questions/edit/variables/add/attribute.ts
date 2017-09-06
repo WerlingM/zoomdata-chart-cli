@@ -3,18 +3,7 @@ import ora = require('ora');
 import { Variables, Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
 import { visualizations } from '../../../../requests';
-
-const options = ['ATTRIBUTE', 'TIME', 'INTEGER', 'MONEY', 'NUMBER'];
-
-const questions: inquirer.Question[] = [
-  {
-    choices: options,
-    message:
-      'Select one or more field types allowed when configuring this variable:',
-    name: 'fieldTypes',
-    type: 'checkbox',
-  },
-];
+import { questions } from '../common/attribute';
 
 function answerHandler(
   answers: inquirer.Answers,

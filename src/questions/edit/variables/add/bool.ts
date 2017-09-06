@@ -3,24 +3,7 @@ import ora = require('ora');
 import { Variables, Visualization } from '../../../../@types/zoomdata';
 import { Config } from '../../../../commands/config';
 import { visualizations } from '../../../../requests';
-
-const questions: inquirer.Question[] = [
-  {
-    choices: [
-      {
-        name: 'true',
-        value: true,
-      },
-      {
-        name: 'false',
-        value: false,
-      },
-    ],
-    message: 'Select the default value for this variable:',
-    name: 'defaultValue',
-    type: 'list',
-  },
-];
+import { questions } from '../common/bool';
 
 function answerHandler(
   answers: inquirer.Answers,
