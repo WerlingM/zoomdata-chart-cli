@@ -17,6 +17,7 @@
     "lint-fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
     "prepush": "npm run build",
+    "prepublish": "npm run lint && npm run build",
     "start": "npm run build:live",
     "test": "jest",
     "test:watch": "jest --watch",
