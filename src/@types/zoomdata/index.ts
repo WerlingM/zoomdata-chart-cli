@@ -66,6 +66,15 @@ export interface Bookmark {
   type: string;
 }
 
+export interface Version {
+  git: string;
+  version: string;
+  revision: string;
+  buildTime: string;
+  instanceId: string;
+  links: any[];
+}
+
 const ShareState = strEnum(['NOT_SHARED', 'VIEW_ONLY', 'VIEW_AND_EDIT']);
 
 interface UnifiedControlsCfg {

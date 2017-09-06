@@ -5,6 +5,7 @@ import { parseJSON } from '../utilities';
 import * as bookmarks from './bookmarks';
 import * as components from './components';
 import * as libraries from './libraries';
+import * as version from './version';
 import * as visualizations from './visualizations';
 
 function send<T>(requestOptions: requestPromise.Options): Promise<T> {
@@ -15,9 +16,11 @@ function send<T>(requestOptions: requestPromise.Options): Promise<T> {
   };
   const options = { ...defaultOptions, ...requestOptions };
 
-  return requestPromise(options).then(result => result).catch(reason => {
-    return Promise.reject(reason);
-  });
+  return requestPromise(options)
+    .then(result => result)
+    .catch(reason => {
+      return Promise.reject(reason);
+    });
 }
 
 function autoParse(body: any, response: http.IncomingMessage): any {
@@ -43,4 +46,4 @@ function autoParse(body: any, response: http.IncomingMessage): any {
   }
 }
 
-export { send, bookmarks, visualizations, components, libraries };
+export { send, bookmarks, visualizations, version, components, libraries };
