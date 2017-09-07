@@ -2,7 +2,7 @@ import { strEnum } from '../../../utilities';
 
 export interface Core {
   name: string;
-  descr: string;
+  descr?: string;
   defaultValue?: any;
   colorMetric: boolean;
   colorNumb: number;
