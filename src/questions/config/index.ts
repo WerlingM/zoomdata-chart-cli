@@ -3,6 +3,7 @@ import * as inquirer from 'inquirer';
 import { homedir } from 'os';
 import * as path from 'path';
 import * as Preferences from 'preferences';
+import { test } from 'shelljs';
 
 const questions: inquirer.Questions = [
   {
@@ -67,7 +68,9 @@ function answerHandler(answers: inquirer.Answers): void {
   inquirer.prompt(confirm).then(confirmAnswers => {
     if (confirmAnswers.configSave) {
       try {
-        fs.unlinkSync(filePath);
+        if (test('-e', filePath)) {
+          fs.unlinkSync(filePath);
+        }
       } catch (e) {
         throw e;
       }
