@@ -80,7 +80,7 @@ function prompt(visualization: Visualization, serverConfig: Config) {
       visualization.variables.map<string[]>(variable => [
         variable.name,
         variable.type,
-        variable.descr,
+        variable.descr || '',
       ]),
     ),
     {

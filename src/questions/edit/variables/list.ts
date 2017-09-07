@@ -9,7 +9,7 @@ export function listVariables(visualization: Visualization) {
       visualization.variables.map<string[]>(variable => [
         variable.name,
         variable.type,
-        variable.descr,
+        variable.descr || '',
       ]),
     ),
     {
