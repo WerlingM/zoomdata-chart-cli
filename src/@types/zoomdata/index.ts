@@ -66,6 +66,109 @@ export interface Bookmark {
   type: string;
 }
 
+export interface Source {
+  visualizations: VisualizationDef[];
+  formulas: Formula[];
+  features: Feature[];
+  isConnectionValid: boolean;
+  connectionTypeId: string;
+  createdByUserID: string;
+  lastModifiedByUserID: string;
+  createdDate: string;
+  lastModifiedDate: string;
+  id: string;
+  name: string;
+  description: string;
+  accountId: string;
+  live: boolean;
+  liveRefreshRate: number;
+  delay: number;
+  delayUnit: string;
+  playbackMode: boolean;
+  textSearchEnabled: boolean;
+  enabled: boolean;
+  type: string;
+  subStorageType: string;
+  viewCount: number;
+  cacheable: boolean;
+  cacheAttributeValues: boolean;
+  queryStrategy: string;
+  hardLimit: number;
+  storageConfiguration: StorageConfiguration;
+  linkedSources: any[];
+  fusedAttributes: any[];
+  objectFields: ObjectField[];
+  volumeMetric: VolumeMetric;
+  controlsCfg: ControlsCfg;
+  version: number;
+  delayMillis: number;
+}
+
+interface Formula {
+  createdByUserID: string;
+  lastModifiedByUserID: string;
+  createdDate: string;
+  lastModifiedDate: string;
+  id: string;
+  sourceId: string;
+  name: string;
+  label: string;
+  script: string;
+  fields: string[];
+  valid: boolean;
+  username: string;
+}
+
+interface Feature {
+  name: string;
+  params: object;
+}
+
+interface StorageConfiguration {
+  connectionId: string;
+  collection: string;
+  collectionParams: object;
+  parameters: object;
+  partitions: object;
+}
+
+interface ObjectField {
+  sourceId: string;
+  label: string;
+  name: string;
+  storageConfig: FieldStorageConfig;
+  visible: boolean;
+  checkedByDefault: boolean;
+  customListValuesOnly: boolean;
+  type: string;
+  facet: boolean;
+  distinctCount: boolean;
+  timestampFormat: string;
+  timestampPattern: string;
+  rawFormatSupportTimeGroup: boolean;
+  refreshable: boolean;
+  timeZoneLabel: string;
+  parentField: boolean;
+  effectiveMin: number;
+  effectiveMax: number;
+  fieldId: string;
+}
+
+interface FieldStorageConfig {
+  originalName: string;
+  min: number;
+  max: number;
+  cardinality: number;
+  metaFlags: string[];
+  originalType: string;
+}
+
+interface VolumeMetric {
+  label: string;
+  visible: boolean;
+  name: string;
+}
+
 export interface Version {
   git: string;
   version: string;
@@ -105,7 +208,8 @@ interface TimeControlCfg {
 interface VisualizationDef {
   id: string;
   visId: string;
-  ownerDashboardId: string;
+  ownerDashboardId?: string;
+  ownerSourceId?: string;
   name: string;
   type: string;
   enabled: boolean;
@@ -143,10 +247,10 @@ interface DashboardLink {
 }
 
 interface ControlsCfg {
-  dashboardId: string;
+  dashboardId?: string;
   id: string;
   playerControlCfg: PlayerControlCfg;
-  sourceId: string;
+  sourceId?: string;
   timeControlCfg: TimeControlCfg;
   visualizationDefId: string;
 }

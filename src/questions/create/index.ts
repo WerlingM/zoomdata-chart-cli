@@ -1,9 +1,9 @@
 import * as inquirer from 'inquirer';
 import ora = require('ora');
-import { Visualization } from '../../@types/zoomdata';
+import { Source, Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { edit } from '../../commands/edit';
-import { visualizations } from '../../requests';
+import { visdefs, visualizations } from '../../requests';
 
 const questions: inquirer.Question[] = [
   {
@@ -23,6 +23,11 @@ const questions: inquirer.Question[] = [
     name: 'template',
     type: 'list',
   },
+  {
+    message: 'Select a source to configure with this custom chart:',
+    name: 'source',
+    type: 'list',
+  },
 ];
 
 function answerHandler(answers: inquirer.Answers, serverConfig: Config) {
@@ -34,28 +39,40 @@ function answerHandler(answers: inquirer.Answers, serverConfig: Config) {
     thumbnailUrl: `images/Template_Custom_Button_sm.png?v=$\{timestamp}`,
   };
 
-  const spinner = ora(`Creating custom chart ${answers.name}`).start();
+  let spinner = ora(`Creating custom chart ${answers.name}`).start();
   return visualizations
     .create(JSON.stringify(body), serverConfig)
-    .then(() => {
+    .then((visualization: Visualization) => {
       spinner.succeed();
       //noinspection ReservedWordAsName
-      const confirm: inquirer.Questions = [
-        {
-          default: false,
-          message: 'Would you like to edit the new chart?:',
-          name: 'newChartEdit',
-          type: 'confirm',
-        },
-      ];
+      spinner = ora(
+        `Setting the default configuration for: ${answers.name} on the selected source`,
+      ).start();
+      return visdefs
+        .setDefaults(answers.source, visualization.id, serverConfig)
+        .then(() => {
+          spinner.succeed();
+          const confirm: inquirer.Questions = [
+            {
+              default: false,
+              message: 'Would you like to edit the new chart?:',
+              name: 'newChartEdit',
+              type: 'confirm',
+            },
+          ];
 
-      return inquirer.prompt(confirm).then(confirmAnswers => {
-        if (confirmAnswers.newChartEdit) {
-          return edit(answers.name, serverConfig);
-        } else {
-          return Promise.resolve();
-        }
-      });
+          return inquirer.prompt(confirm).then(confirmAnswers => {
+            if (confirmAnswers.newChartEdit) {
+              return edit(answers.name, serverConfig);
+            } else {
+              return Promise.resolve();
+            }
+          });
+        })
+        .catch(error => {
+          spinner.fail();
+          return Promise.reject(error);
+        });
     })
     .catch(error => {
       spinner.fail();
@@ -63,10 +80,18 @@ function answerHandler(answers: inquirer.Answers, serverConfig: Config) {
     });
 }
 
-function prompt(templates: Visualization[], serverConfig: Config) {
+function prompt(
+  templates: Visualization[],
+  sources: Source[],
+  serverConfig: Config,
+) {
   questions[1].choices = templates.map<
     inquirer.objects.ChoiceOption
   >(template => ({ name: template.name, value: template.id }));
+  questions[2].choices = sources.map<inquirer.objects.ChoiceOption>(source => ({
+    name: source.name,
+    value: source.id,
+  }));
   return inquirer
     .prompt(questions)
     .then(answers => answerHandler(answers, serverConfig));
