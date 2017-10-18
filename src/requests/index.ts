@@ -35,7 +35,9 @@ function autoParse(body: any, response: http.IncomingMessage): any {
     ) {
       const parsedJSON = parseJSON(body);
       if (parsedJSON instanceof Error) {
-        throw parsedJSON;
+        /* Don't through Error. Zoomdata will sometime return plain text in responses
+         with content-type = application/vnd.zoomdata.v2+json'. Refer to ticket: ZP-5063 */
+        return body;
       } else {
         return parsedJSON;
       }
