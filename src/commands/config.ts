@@ -1,6 +1,6 @@
-import * as Preferences from 'preferences';
 import * as prettyjson from 'prettyjson';
 import * as configQuestions from '../questions/config';
+import { Preferences } from '../utilities/Preferences';
 
 interface Config {
   application: string;
@@ -24,7 +24,7 @@ function getConfig(options: ConfigOptions): Config {
 
   // if program was called with no options, show help.
   if (!app && !user) {
-    const savedConfig = new Preferences('zd-chart');
+    const savedConfig = Preferences('zd-chart');
 
     if (Object.keys(savedConfig).length === 0) {
       console.log(
@@ -40,7 +40,7 @@ function getConfig(options: ConfigOptions): Config {
     }
   } else if (!app || !user) {
     // if program was called with either option undefined
-    const savedConfig = new Preferences('zd-chart');
+    const savedConfig = Preferences('zd-chart');
 
     if (Object.keys(savedConfig).length === 0) {
       console.log(

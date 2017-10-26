@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as inquirer from 'inquirer';
 import { homedir } from 'os';
 import * as path from 'path';
-import * as Preferences from 'preferences';
 import { test } from 'shelljs';
+import { Preferences } from '../../utilities/Preferences';
 
 const questions: inquirer.Questions = [
   {
@@ -53,7 +53,7 @@ function answerHandler(answers: inquirer.Answers): void {
     .replace(/[\/?<>\\:*|" ]/g, '.')
     .replace(/\.+/g, '.');
   const homeDir = homedir();
-  const dirPath = path.join(homeDir, '.config', 'preferences');
+  const dirPath = path.join(homeDir, '.config', 'zoomdata');
   const filePath = path.join(dirPath, identifier + '.pref');
   //noinspection ReservedWordAsName
   const confirm: inquirer.Questions = [
@@ -74,9 +74,7 @@ function answerHandler(answers: inquirer.Answers): void {
       } catch (e) {
         throw e;
       }
-      /* tslint:disable:no-unused-expression */
-      new Preferences('zd-chart', answers);
-      /* tslint:enable:no-unused-expression */
+      Preferences('zd-chart', answers);
     }
   });
 }
