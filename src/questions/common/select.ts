@@ -48,7 +48,7 @@ function prompt(serverConfig: Config) {
           resolve(
             fuzzyResult.map((el: any) => ({
               name: el.string,
-              value: el.original.id,
+              value: el.original,
             })),
           );
         });
