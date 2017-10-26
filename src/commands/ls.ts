@@ -1,3 +1,4 @@
+import sortBy = require('lodash.sortby');
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { visualizations } from '../requests';
@@ -9,7 +10,13 @@ function listCustomVisualizations(config: Config) {
     .getCustom(config)
     .then(customVisualizations => {
       spinner.succeed();
-      console.log(prettyjson.render(customVisualizations.map(vis => vis.name)));
+      console.log(
+        prettyjson.render(
+          sortBy(customVisualizations.map(vis => vis.name), name =>
+            name.toLowerCase(),
+          ),
+        ),
+      );
     })
     .catch(error => {
       spinner.fail();

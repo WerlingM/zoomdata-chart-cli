@@ -1,5 +1,6 @@
 import * as chalk from 'chalk';
 import * as inquirer from 'inquirer';
+import sortBy = require('lodash.sortby');
 import ora = require('ora');
 import * as prettyjson from 'prettyjson';
 import { Visualization } from '../../@types/zoomdata';
@@ -22,7 +23,12 @@ function answerHandler(visualization: Visualization, serverConfig: Config) {
         );
         console.log(
           chalk.yellow(
-            prettyjson.render(bmks.bookmarksMap.map(bookmark => bookmark.name)),
+            prettyjson.render(
+              sortBy(
+                bmks.bookmarksMap.map(bookmark => bookmark.name),
+                bookmarkName => bookmarkName.toLowerCase(),
+              ),
+            ),
           ),
         );
         return Promise.resolve();

@@ -1,15 +1,22 @@
+import * as fuzzy from 'fuzzy';
 import * as inquirer from 'inquirer';
+import sortBy = require('lodash.sortby');
 import ora = require('ora');
 import { Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { visualizations } from '../../requests';
+
+inquirer.registerPrompt(
+  'autocomplete',
+  require('inquirer-autocomplete-prompt'),
+);
 
 // TODO Change questions type once ChoiceOption has been fixed
 const questions: Array<{ [key: string]: any }> = [
   {
     message: 'Select a custom chart:',
     name: 'chart',
-    type: 'list',
+    type: 'autocomplete',
   },
 ];
 
@@ -23,10 +30,29 @@ function prompt(serverConfig: Config) {
     .getCustom(serverConfig)
     .then(customVisualizations => {
       spinner.succeed();
-      questions[0].choices = customVisualizations.map(customVis => ({
-        name: customVis.name,
-        value: customVis,
-      }));
+      (questions[0] as any).source = searchCustomCharts;
+
+      function searchCustomCharts(
+        answers: string[],
+        input: string,
+      ): Promise<any[]> {
+        input = input || '';
+        return new Promise(resolve => {
+          const fuzzyResult = fuzzy.filter(
+            input,
+            sortBy(customVisualizations, customVis =>
+              customVis.name.toLowerCase(),
+            ),
+            { extract: (el: any) => el.name },
+          );
+          resolve(
+            fuzzyResult.map((el: any) => ({
+              name: el.string,
+              value: el.original.id,
+            })),
+          );
+        });
+      }
 
       return inquirer.prompt(questions).then(answers => answerHandler(answers));
     })

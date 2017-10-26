@@ -1,13 +1,20 @@
+import * as fuzzy from 'fuzzy';
 import * as inquirer from 'inquirer';
+import sortBy = require('lodash.sortby');
 import ora = require('ora');
 import { Config } from '../../commands/config';
 import { libraries } from '../../requests';
+
+inquirer.registerPrompt(
+  'autocomplete',
+  require('inquirer-autocomplete-prompt'),
+);
 
 const questions: inquirer.Question[] = [
   {
     message: 'Select a library to remove from the server:',
     name: 'library',
-    type: 'list',
+    type: 'autocomplete',
   },
 ];
 
@@ -50,13 +57,30 @@ function prompt(serverConfig: Config) {
     .get(serverConfig)
     .then(libs => {
       spinner.succeed();
-      questions[0].choices = libs
-        .filter(library => typeof library.accountId !== 'undefined')
-        .sort((a, b) => (a.filename < b.filename ? -1 : 1))
-        .map<inquirer.objects.ChoiceOption>(library => ({
-          name: library.filename,
-          value: library.id,
-        }));
+      (questions[0] as any).source = searchLibraries;
+
+      function searchLibraries(
+        answers: string[],
+        input: string,
+      ): Promise<any[]> {
+        input = input || '';
+        return new Promise(resolve => {
+          const fuzzyResult = fuzzy.filter(
+            input,
+            sortBy(
+              libs.filter(library => typeof library.accountId !== 'undefined'),
+              library => library.filename.toLowerCase(),
+            ),
+            { extract: (el: any) => el.filename },
+          );
+          resolve(
+            fuzzyResult.map((el: any) => ({
+              name: el.string,
+              value: el.original.id,
+            })),
+          );
+        });
+      }
 
       return inquirer
         .prompt(questions)

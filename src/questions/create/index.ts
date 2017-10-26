@@ -1,9 +1,16 @@
+import * as fuzzy from 'fuzzy';
 import * as inquirer from 'inquirer';
+import sortBy = require('lodash.sortby');
 import ora = require('ora');
 import { Source, Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { edit } from '../../commands/edit';
 import { visdefs, visualizations } from '../../requests';
+
+inquirer.registerPrompt(
+  'autocomplete',
+  require('inquirer-autocomplete-prompt'),
+);
 
 const questions: inquirer.Question[] = [
   {
@@ -21,12 +28,12 @@ const questions: inquirer.Question[] = [
   {
     message: 'Select a built in template to start from:',
     name: 'template',
-    type: 'list',
+    type: 'autocomplete',
   },
   {
     message: 'Select a source to configure with this custom chart:',
     name: 'source',
-    type: 'list',
+    type: 'autocomplete',
   },
 ];
 
@@ -85,13 +92,43 @@ function prompt(
   sources: Source[],
   serverConfig: Config,
 ) {
-  questions[1].choices = templates.map<
-    inquirer.objects.ChoiceOption
-  >(template => ({ name: template.name, value: template.id }));
-  questions[2].choices = sources.map<inquirer.objects.ChoiceOption>(source => ({
-    name: source.name,
-    value: source.id,
-  }));
+  (questions[1] as any).source = searchTemplates;
+  (questions[2] as any).source = searchSources;
+
+  function searchTemplates(answers: string[], input: string): Promise<any[]> {
+    input = input || '';
+    return new Promise(resolve => {
+      const fuzzyResult = fuzzy.filter(
+        input,
+        sortBy(templates, template => template.name.toLowerCase()),
+        { extract: (el: any) => el.name },
+      );
+      resolve(
+        fuzzyResult.map((el: any) => ({
+          name: el.string,
+          value: el.original.id,
+        })),
+      );
+    });
+  }
+
+  function searchSources(answers: string[], input: string): Promise<any[]> {
+    input = input || '';
+    return new Promise(resolve => {
+      const fuzzyResult = fuzzy.filter(
+        input,
+        sortBy(sources, source => source.name.toLowerCase()),
+        { extract: (el: any) => el.name },
+      );
+      resolve(
+        fuzzyResult.map((el: any) => ({
+          name: el.string,
+          value: el.original.id,
+        })),
+      );
+    });
+  }
+
   return inquirer
     .prompt(questions)
     .then(answers => answerHandler(answers, serverConfig));
