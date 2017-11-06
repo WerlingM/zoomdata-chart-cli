@@ -21,7 +21,7 @@ The zoomdata-chart-cli is a tool designed to help you manage all aspects of the 
 
 Upon installation, you may want to configure the default Zoomdata environment to be used by the cli. While this is not a requirement, it greatly improves the user experience since it avoids having to provide the server URL and administrative credentials with every command.
 
-`zd-chart-cli config`
+`zd-chart config`
 
 Follow the prompts to store your default server configuration in an encrypted file. The cli checks for the presence of this file if you omit the server or credentials when running a command.
 
