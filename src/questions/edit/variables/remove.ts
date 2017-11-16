@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as inquirer from 'inquirer';
 import ora = require('ora');
 import stripAnsi = require('strip-ansi');
@@ -40,9 +40,9 @@ function answerHandler(
       );
 
       const spinner = ora(
-        `Removing variable ${variableToDelete
-          ? variableToDelete.name
-          : ''} from: ${visualization.name}`,
+        `Removing variable ${
+          variableToDelete ? variableToDelete.name : ''
+        } from: ${visualization.name}`,
       ).start();
       return visualizations
         .update(visualization.id, JSON.stringify(visualization), serverConfig)

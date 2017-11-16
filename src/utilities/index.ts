@@ -73,7 +73,7 @@ function writeFile(dir: string, name: string, body: string | Buffer) {
   });
 }
 
-function readFile(path: string, name: string) {
+function readFile(path: string, name: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(`${path}/${name}`, 'utf8', (err, data) => {
       if (err) {

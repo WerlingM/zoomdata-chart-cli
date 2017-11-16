@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as inquirer from 'inquirer';
 import stripAnsi = require('strip-ansi');
 import * as textTable from 'text-table';

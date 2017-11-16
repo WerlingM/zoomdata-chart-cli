@@ -27,7 +27,7 @@ function getPkgBuffer(
   return send<Buffer>(requestOptions);
 }
 
-function create(body: string, serverConfig: Config) {
+function create(body: string, serverConfig: Config): Promise<Visualization> {
   const { application, username, password } = serverConfig;
   const url = `${application}/service/visualizations`;
   const requestOptions: request.Options = {
@@ -74,7 +74,9 @@ function getByName(name: string, serverConfig: Config): Promise<Visualization> {
     .then(visualizations => {
       if (visualizations.length === 0) {
         throw new Error(
-          `Visualization with name: "${name}" does not exist in this Zoomdata server`,
+          `Visualization with name: "${
+            name
+          }" does not exist in this Zoomdata server`,
         );
       }
       return visualizations[0];

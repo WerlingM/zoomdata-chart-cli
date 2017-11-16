@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import stripAnsi = require('strip-ansi');
 import * as textTable from 'text-table';
 import { Visualization } from '../../../@types/zoomdata/index';
