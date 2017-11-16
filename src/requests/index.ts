@@ -13,6 +13,7 @@ import * as visualizations from './visualizations';
 function send<T>(requestOptions: requestPromise.Options): Promise<T> {
   const defaultOptions = {
     simple: true,
+    strictSSL: false,
     transform: autoParse,
     transform2xxOnly: true,
   };
