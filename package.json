@@ -1,6 +1,6 @@
 {
   "name": "zoomdata-chart-cli",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "A CLI tool to manage Zoomdata Custom Charts",
   "main": "./dist/zoomdata-chart.js",
   "author": "Jonathan Avila <avilajonathan@gmail.com>",
