@@ -30,16 +30,15 @@ function updateVisConfig(dir: string, config: Config) {
             ),
           ),
         );
+        visConfig.libs = visualization.libs;
         return Promise.all(updateBodies).then(() =>
-          writeFile(
-            dir,
-            VIS_FILE_NAME,
-            JSON.stringify(visConfig),
-          ).then(visConfigJSON => ({
-            visConfigJSON,
-            visualizationId: visualization.id,
-            visualizationName: visualization.name,
-          })),
+          writeFile(dir, VIS_FILE_NAME, JSON.stringify(visConfig)).then(
+            visConfigJSON => ({
+              visConfigJSON,
+              visualizationId: visualization.id,
+              visualizationName: visualization.name,
+            }),
+          ),
         );
       }),
     )

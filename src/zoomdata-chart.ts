@@ -10,7 +10,7 @@ console.log(
 );
 
 program
-  .version('1.0.0-beta.9')
+  .version('1.0.0-beta.10')
   .description('A CLI tool to manage Zoomdata Custom Charts')
   .command('add', 'Add a custom chart or library to the Zoomdata server')
   .command(
