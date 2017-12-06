@@ -1,7 +1,11 @@
 import * as inquirer from 'inquirer';
-import { Visualization } from '../../@types/zoomdata';
+import keys = require('lodash.keys');
+import pick = require('lodash.pick');
+import ora = require('ora');
+import { Source, Visualization } from '../../@types/zoomdata';
 import { Config } from '../../commands/config';
 import { edit } from '../../commands/edit';
+import { sources, visdefs } from '../../requests';
 import { strEnum } from '../../utilities';
 import * as componentQuestions from './components';
 import * as controlQuestions from './controls';
@@ -74,7 +78,74 @@ function answerHandler(
       case editOptions.Variables:
         return variableQuestion
           .prompt(visualization, serverConfig)
-          .then(() => resolve())
+          .then(editOperation => {
+            /*
+            * 1. Find all sources with the custom vis enabled
+            * 2. For each source, get the current variable config and default variable config
+            * 3. Merge the the existing variable config into the default variable config only
+            *    on keys that exist in the default variable config*/
+            if (editOperation !== 'LIST' && editOperation !== 'NOTHING') {
+              return sources
+                .get(serverConfig, {
+                  fields: 'name,visualizations',
+                  filterByEdit: true,
+                })
+                .then((sourcesList: Source[]) => {
+                  const sourcesWithVisEnabled = sourcesList.filter(source =>
+                    source.visualizations.find(
+                      visDef => visDef.visId === visualization.id,
+                    ),
+                  );
+                  const spinner = ora(
+                    `Updating sources with visualization: "${
+                      visualization.name
+                    }" enabled"`,
+                  ).start();
+                  return Promise.all(
+                    sourcesWithVisEnabled.map(async source => {
+                      const sourceVisDef = await visdefs.get(
+                        source.id,
+                        visualization.id,
+                        serverConfig,
+                      );
+                      const visDefVariables = sourceVisDef.source.variables;
+                      const sourceVisDefaultDef = await visdefs.getDefault(
+                        source.id,
+                        visualization.id,
+                        serverConfig,
+                      );
+                      const visDefDefaultVariables =
+                        sourceVisDefaultDef.source.variables;
+                      const defaultVariablesKeys = keys(visDefDefaultVariables);
+                      const existingDefaultVariables = pick(
+                        visDefVariables,
+                        defaultVariablesKeys,
+                      );
+                      sourceVisDef.source.variables = {
+                        ...visDefDefaultVariables,
+                        ...existingDefaultVariables,
+                      };
+                      return visdefs.update(
+                        source.id,
+                        visualization.id,
+                        JSON.stringify(sourceVisDef),
+                        serverConfig,
+                      );
+                    }),
+                  )
+                    .then(() => {
+                      spinner.succeed();
+                      return resolve();
+                    })
+                    .catch(error => {
+                      spinner.fail();
+                      return reject(error);
+                    });
+                })
+                .catch(error => reject(error));
+            }
+            return resolve();
+          })
           .catch(error => reject(error));
     }
   })

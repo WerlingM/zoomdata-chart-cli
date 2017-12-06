@@ -46,21 +46,30 @@ function answerHandler(
   answers: inquirer.Answers,
   visualization: Visualization,
   serverConfig: Config,
-) {
+): Promise<string> {
   switch (answers.variables) {
     case variableOptions.Add:
-      return addQuestions.prompt(visualization, serverConfig);
+      return addQuestions.prompt(visualization, serverConfig).then(() => 'ADD');
     case variableOptions.Edit:
-      return editQuestions.prompt(visualization, serverConfig);
+      return editQuestions
+        .prompt(visualization, serverConfig)
+        .then(() => 'EDIT');
     case variableOptions.List:
-      return listVariables(visualization);
-
+      listVariables(visualization);
+      return Promise.resolve('LIST');
     case variableOptions.Remove:
-      return removeQuestions.prompt(visualization, serverConfig);
+      return removeQuestions
+        .prompt(visualization, serverConfig)
+        .then(() => 'REMOVE');
+    default:
+      return Promise.resolve('NOTHING');
   }
 }
 
-function prompt(visualization: Visualization, serverConfig: Config) {
+function prompt(
+  visualization: Visualization,
+  serverConfig: Config,
+): Promise<string> {
   return inquirer
     .prompt(questions)
     .then(answers => answerHandler(answers, visualization, serverConfig));

@@ -205,7 +205,7 @@ interface TimeControlCfg {
   to: string;
 }
 
-interface VisualizationDef {
+export interface VisualizationDef {
   id: string;
   visId: string;
   ownerDashboardId?: string;

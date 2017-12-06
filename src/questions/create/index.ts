@@ -53,10 +53,12 @@ function answerHandler(answers: inquirer.Answers, serverConfig: Config) {
       spinner.succeed();
       //noinspection ReservedWordAsName
       spinner = ora(
-        `Setting the default configuration for: ${answers.name} on the selected source`,
+        `Setting the default configuration for: ${
+          answers.name
+        } on the selected source`,
       ).start();
       return visdefs
-        .setDefaults(answers.source, visualization.id, serverConfig)
+        .createDefault(answers.source, visualization.id, serverConfig)
         .then(() => {
           spinner.succeed();
           const confirm: inquirer.Questions = [
